@@ -1,10 +1,7 @@
 package org.example.service;
 
 import org.example.entities.Department;
-import org.example.repository.DepartmentRepository;
-import org.example.repository.DepartmentRepositoryInMemImpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class DepartmentServiceImpl implements DepartmentService {

@@ -1,11 +1,16 @@
 package org.example.repository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface Repository<T, Integer> {
-    void add(T object);
-    void removeAll();
-    void update(int id, T newObject);
-    T getById(int id);
-    List<T> getAll();
+public interface Repository<T> {
+    T save(T entity);
+
+    Optional<T> findById(Integer id);
+
+    List<T> findAll();
+
+    void update(T entity);
+
+    boolean delete(Integer id);
 }
