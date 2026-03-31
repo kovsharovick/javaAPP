@@ -22,4 +22,8 @@ public class User {
         this.email = email;
         this.isAdmin = isAdmin;
     }
+
+    public boolean getAdmin() { return isAdmin; }
+    public void setAdmin(boolean admin) { isAdmin = admin; }
+
 }

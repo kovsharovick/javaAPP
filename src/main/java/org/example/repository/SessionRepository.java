@@ -12,5 +12,5 @@ public interface SessionRepository extends Repository<Session> {
 
     List<Session> findByStartTimeBetween(LocalDateTime from, LocalDateTime to);
 
-    boolean existsOverlap(Integer hallId, LocalDateTime startTime, Integer excludeSessionId);
+    boolean existsOverlap(Integer hallId, LocalDateTime startTime, LocalDateTime endTime, Integer excludeSessionId);
 }

@@ -8,16 +8,16 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
-public class Orders {
+public class Order {
     private Integer id;
     private Integer userId;
     private BigDecimal amount;
     private LocalDateTime dateTime;
     private OrderStatus orderStatus;
 
-    public Orders() {}
+    public Order() {}
 
-    public Orders(Integer id, Integer userId, BigDecimal amount, LocalDateTime dateTime, OrderStatus orderStatus) {
+    public Order(Integer id, Integer userId, BigDecimal amount, LocalDateTime dateTime, OrderStatus orderStatus) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
