@@ -6,7 +6,6 @@ repository,
 service (interface)
 
 Реализовать:
-
 service (impl),
 cli,
 хеширование!
