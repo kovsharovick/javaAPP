@@ -1,8 +1,6 @@
 package org.example.cli.Get;
 
 import org.example.cli.Command;
-import org.example.service.DepartmentService;
-import org.example.service.DepartmentServiceImpl;
 
 import java.util.Scanner;
 
