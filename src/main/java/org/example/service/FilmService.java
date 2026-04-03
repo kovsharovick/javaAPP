@@ -11,5 +11,9 @@ public interface FilmService extends Service<Film, Integer> {
 
     boolean delete(Integer id);
 
+    //фильмы по названию.
     List<Film> findByNameContaining(String namePart);
+
+    //все фильмы у которых есть будущие сеансы.
+    List<Film> findUsingFilm();
 }

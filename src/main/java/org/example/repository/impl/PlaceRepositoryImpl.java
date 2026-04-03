@@ -36,18 +36,20 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     }
 
     @Override
-    public Optional<Place> findById(Integer id) {
+    public Place findById(Integer id) {
         String sql = "SELECT * FROM place WHERE id_place = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) return Optional.of(mapResultSet(rs));
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске места", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override

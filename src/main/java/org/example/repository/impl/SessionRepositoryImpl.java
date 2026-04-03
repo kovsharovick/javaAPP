@@ -35,18 +35,20 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public Optional<Session> findById(Integer id) {
+    public Session findById(Integer id) {
         String sql = "SELECT * FROM session WHERE id_session = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) return Optional.of(mapResultSet(rs));
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске сеанса", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -165,6 +167,24 @@ public class SessionRepositoryImpl implements SessionRepository {
             throw new RuntimeException("Ошибка при проверке пересечения сеансов", e);
         }
         return false;
+    }
+
+    @Override
+    public List<Session> findByStartTimeAfter(LocalDateTime time) {
+        List<Session> sessions = new ArrayList<>();
+        String sql = "SELECT * FROM session WHERE starting > ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, time);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    sessions.add(mapResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске сеансов по временному интервалу", e);
+        }
+        return sessions;
     }
 
     private Session mapResultSet(ResultSet rs) throws SQLException {

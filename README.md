@@ -1,14 +1,13 @@
 Сайт кинотеатра для покупки билетов
 
 Готово:
-model
-repository
+model,
+repository,
 service (interface)
 
 Реализовать:
-
-service (impl)
-cli
+service (impl),
+cli,
 хеширование!
 
 

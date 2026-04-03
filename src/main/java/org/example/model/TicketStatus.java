@@ -4,5 +4,5 @@ public enum TicketStatus {
     RESERVED,
     SOLD,
     USED,
-    FREE
+    CANCELED
 }

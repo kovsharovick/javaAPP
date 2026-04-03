@@ -24,11 +24,8 @@ public class AuthServiceImpl implements AuthService {
         if (email == null || password == null) {
             return false;
         }
-        Optional<User> userOpt = Optional.ofNullable(userRepository.findByEmail(email));
-        if (userOpt.isEmpty()) {
-            return false;
-        }
-        User user = userOpt.get();
+        User user = userRepository.findByEmail(email);
+        if (user == null) return false;
         if (passwordHasher.matches(password, user.getPassword())) {
             authContext.setCurrentUser(user);
             return true;

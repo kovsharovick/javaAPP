@@ -32,18 +32,20 @@ public class HallRepositoryImpl implements HallRepository {
     }
 
     @Override
-    public Optional<Hall> findById(Integer id) {
+    public Hall findById(Integer id) {
         String sql = "SELECT * FROM hall WHERE id_hall = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) return Optional.of(mapResultSet(rs));
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске зала", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override

@@ -35,18 +35,20 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     @Override
-    public Optional<Film> findById(Integer id) {
+    public Film findById(Integer id) {
         String sql = "SELECT * FROM film WHERE id_film = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) return Optional.of(mapResultSet(rs));
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске фильма", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override

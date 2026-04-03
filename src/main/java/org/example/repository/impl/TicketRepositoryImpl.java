@@ -1,7 +1,6 @@
 package org.example.repository.impl;
 
 import org.example.config.DatabaseConnection;
-import org.example.model.Order;
 import org.example.model.Ticket;
 import org.example.model.TicketStatus;
 import org.example.repository.TicketRepository;
@@ -9,7 +8,6 @@ import org.example.repository.TicketRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class TicketRepositoryImpl implements TicketRepository {
 
@@ -36,18 +34,50 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public Optional<Ticket> findById(Integer id) {
+    public void saveWithConnection(Connection conn, Ticket ticket) throws SQLException {
+        String sql = "INSERT INTO ticket (id_orders, id_place, id_session, price, status) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, ticket.getOrdersId());
+            pstmt.setInt(2, ticket.getPlaceId());
+            pstmt.setInt(3, ticket.getSessionId());
+            pstmt.setBigDecimal(4, ticket.getPrice());
+            pstmt.setString(5, ticket.getTicketStatus().toString());
+            pstmt.executeUpdate();
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    ticket.setId(rs.getInt(1));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updateTicketStatusByOrderId(Connection conn, Integer orderId, TicketStatus oldStatus, TicketStatus newStatus) throws SQLException {
+        String sql = "UPDATE ticket SET status=? WHERE id_orders=? AND status=?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newStatus.toString());
+            pstmt.setInt(2, orderId);
+            pstmt.setString(3, oldStatus.toString());
+            pstmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public Ticket findById(Integer id) {
         String sql = "SELECT * FROM ticket WHERE id_ticket = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) return Optional.of(mapResultSet(rs));
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске билета", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -151,6 +181,21 @@ public class TicketRepositoryImpl implements TicketRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при удалении билетов по айди заказа", e);
         }
+    }
+
+    @Override
+    public boolean isPlaceFree(Connection conn, Integer sessionId, Integer placeId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM ticket WHERE id_session = ? AND id_place = ? AND ticket_status IN ('RESERVED', 'SOLD') FOR UPDATE";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, sessionId);
+            pstmt.setInt(2, placeId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) == 0;
+                }
+            }
+        }
+        return true;
     }
 
     private Ticket mapResultSet(ResultSet rs) throws SQLException {

@@ -34,18 +34,20 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findById(Integer id) {
+    public User findById(Integer id) {
         String sql = "SELECT * FROM user_data WHERE id_user_data = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) return Optional.of(mapResultSet(rs));
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске пользователя", e);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -97,11 +99,14 @@ public class UserRepositoryImpl implements UserRepository {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             try (ResultSet rs = pstmt.executeQuery()) {
-                return mapResultSet(rs);
+                if (rs.next()) {
+                    return mapResultSet(rs);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при получении пользователя по email", e);
         }
+        return null;
     }
 
     @Override
