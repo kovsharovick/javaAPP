@@ -129,9 +129,9 @@ public class UserRepositoryImpl implements UserRepository {
     private User mapResultSet(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("id_user_data"),
-                rs.getString("email"),
                 rs.getString("password"),
                 rs.getString("full_name"),
+                rs.getString("email"),
                 rs.getBoolean("is_admin")
         );
     }

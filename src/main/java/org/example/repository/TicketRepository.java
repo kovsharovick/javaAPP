@@ -21,4 +21,6 @@ public interface TicketRepository extends Repository<Ticket> {
     void saveWithConnection(Connection conn, Ticket ticket) throws SQLException;
 
     void updateTicketStatusByOrderId(Connection conn, Integer orderId, TicketStatus oldStatus, TicketStatus newStatus) throws SQLException;
+
+    void markTicketsAsUsedForSession(Integer sessionId);
 }

@@ -187,6 +187,24 @@ public class SessionRepositoryImpl implements SessionRepository {
         return sessions;
     }
 
+    @Override
+    public List<Session> findByFinishTimeBefore(LocalDateTime now) {
+        List<Session> sessions = new ArrayList<>();
+        String sql = "SELECT * FROM session WHERE finishing < ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, now);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    sessions.add(mapResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске сеансов по временному интервалу", e);
+        }
+        return sessions;
+    }
+
     private Session mapResultSet(ResultSet rs) throws SQLException {
         return new Session(
                 rs.getInt("id_session"),

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderService extends Service<Order, Integer> {
 
-    Order createOrder(Integer userId);
+    //Order createOrder(Integer userId);
 
     List<Order> findByUserId(Integer userId);
 
@@ -20,7 +20,7 @@ public interface OrderService extends Service<Order, Integer> {
 
     record OrderWithTickets(Order order, List<Ticket> tickets) {};
 
-    void confirmPayment(Integer orderId); //симуляция оплаты.
+    void confirmPayment(Integer orderId, Integer userId, boolean isAdmin); //симуляция оплаты.
 
     void cancelExpiredReservations();
 }

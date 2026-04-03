@@ -3,6 +3,7 @@ package org.example.repository.impl;
 import org.example.config.DatabaseConnection;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
+import org.example.model.TicketStatus;
 import org.example.repository.OrderRepository;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order save(Order order) {
-        String sql = "INSERT INTO orders (id_user_data, amount, date_and_time, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO orders (id_user_data, amount, date_and_time, status, reserved_until) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -24,6 +25,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             pstmt.setBigDecimal(2, order.getAmount());
             pstmt.setObject(3, order.getDateTime());
             pstmt.setString(4, (order.getOrderStatus()).toString());
+            pstmt.setObject(5, order.getReservedUntil());
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -36,7 +38,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order createOrderWithConnection(Connection conn, Integer userId) throws SQLException {
+    public Order createOrderWithConnection(Connection conn, Integer userId, Integer reservedTime) throws SQLException {
         String sql = "INSERT INTO orders (id_user_data, amount, date_and_time, status, reserved_until) VALUES (?, ?, ?, ?, ?)";
         Order order = new Order();
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -44,7 +46,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             pstmt.setBigDecimal(2, BigDecimal.ZERO);
             pstmt.setObject(3, LocalDateTime.now());
             pstmt.setString(4, OrderStatus.WAIT_PAYMENT.toString());
-            pstmt.setObject(5, LocalDateTime.now().plusMinutes(15));
+            pstmt.setObject(5, LocalDateTime.now().plusMinutes(reservedTime));
 
             pstmt.executeUpdate();
 
@@ -52,7 +54,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             order.setAmount(BigDecimal.ZERO);
             order.setDateTime(LocalDateTime.now());
             order.setOrderStatus(OrderStatus.WAIT_PAYMENT);
-            order.setReservedUntil(LocalDateTime.now().plusMinutes(15));
+            order.setReservedUntil(LocalDateTime.now().plusMinutes(reservedTime));
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -111,12 +113,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void updateWithConnection(Connection conn, Order order, LocalDateTime reservedUntil) throws SQLException {
-        String sql = "UPDATE orders SET status=?, reserved_until=? WHERE id_orders=?";
+    public void updateWithConnection(Connection conn, Order order) throws SQLException {
+        String sql = "UPDATE orders SET status=?, reserved_until=?, amount=? WHERE id_orders=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, order.getOrderStatus().toString());
-            pstmt.setObject(2, reservedUntil);
-            pstmt.setInt(3, order.getId());
+            pstmt.setObject(2, order.getReservedUntil());
+            pstmt.setBigDecimal(3, order.getAmount());
+            pstmt.setInt(4, order.getId());
             pstmt.executeUpdate();
         }
     }
@@ -130,6 +133,52 @@ public class OrderRepositoryImpl implements OrderRepository {
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при удалении заказа", e);
+        }
+    }
+
+    @Override
+    public List<Order> findExpiredReservations() {
+        String sql = "SELECT * FROM orders WHERE status = 'WAIT_PAYMENT' AND reserved_until < NOW()";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            List<Order> orders = new ArrayList<>();
+            while (rs.next()) orders.add(mapResultSet(rs));
+            return orders;
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске просроченных заказов", e);
+        }
+    }
+
+    @Override
+    public void cancelOrderWithConnection(Connection conn, Integer orderId) throws SQLException {
+        String sqlOrder = "UPDATE orders SET status=? WHERE id_orders=?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlOrder)) {
+            pstmt.setString(1, OrderStatus.CANCELED.toString());
+            pstmt.setInt(2, orderId);
+            pstmt.executeUpdate();
+        }
+        String sqlTicket = "UPDATE ticket SET status=? WHERE id_orders=?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlTicket)) {
+            pstmt.setString(1, TicketStatus.CANCELED.toString());
+            pstmt.setInt(2, orderId);
+            pstmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void confirmPaymentWithConnection(Connection conn, Integer orderId) throws SQLException {
+        String sqlOrder = "UPDATE orders SET status=? WHERE id_orders=?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlOrder)) {
+            pstmt.setString(1, OrderStatus.COMPLETED.toString());
+            pstmt.setInt(2, orderId);
+            pstmt.executeUpdate();
+        }
+        String sqlTicket = "UPDATE ticket SET status=? WHERE id_orders=?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlTicket)) {
+            pstmt.setString(1, TicketStatus.SOLD.toString());
+            pstmt.setInt(2, orderId);
+            pstmt.executeUpdate();
         }
     }
 

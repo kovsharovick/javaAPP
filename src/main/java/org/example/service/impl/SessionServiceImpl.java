@@ -27,7 +27,7 @@ public class SessionServiceImpl implements SessionService {
         if (film == null) {
             throw new IllegalStateException("Фильм не найден");
         }
-        LocalDateTime endTime = startTime.plus(filmRepository.findById(filmId).getDuration());
+        LocalDateTime endTime = startTime.plus(film.getDuration());
         if (sessionRepository.existsOverlap(hallId, startTime, endTime, null)) {
             throw new IllegalStateException("Сеанс в это время уже существует!");
         }
@@ -45,13 +45,21 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public void markFinishedSessions() {
+        List<Session> finishedSessions = sessionRepository.findByFinishTimeBefore(LocalDateTime.now());
+        for (Session session : finishedSessions) {
+            ticketRepository.markTicketsAsUsedForSession(session.getId());
+        }
+    }
+
+    @Override
     public boolean delete(Integer id, boolean deleteWithHistory) {
         List<Ticket> tickets = ticketRepository.findBySessionId(id);
         if (!tickets.isEmpty()) {
             if (deleteWithHistory) {
                 for (Ticket ticket : tickets) {
                     if (ticket.getTicketStatus() == TicketStatus.RESERVED || ticket.getTicketStatus() == TicketStatus.SOLD) {
-                        throw new IllegalStateException("Невозможно удалить место, так как существуют неиспользованные билеты с ним");
+                        throw new IllegalStateException("Невозможно удалить сеанс, так как существуют неиспользованные билеты с ним");
                     } else {
                         ticketRepository.delete(ticket.getId()); // использованные билеты тоже удаляем.
                     }

@@ -15,4 +15,6 @@ public interface SessionRepository extends Repository<Session> {
     boolean existsOverlap(Integer hallId, LocalDateTime startTime, LocalDateTime endTime, Integer excludeSessionId);
 
     List<Session> findByStartTimeAfter(LocalDateTime time);
+
+    List<Session> findByFinishTimeBefore(LocalDateTime now);
 }

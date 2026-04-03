@@ -24,4 +24,6 @@ public interface SessionService extends Service<Session, Integer> {
 
     //сеансы после определенного времени.
     List<Session> findUpcoming(LocalDateTime from);
+
+    void markFinishedSessions();
 }

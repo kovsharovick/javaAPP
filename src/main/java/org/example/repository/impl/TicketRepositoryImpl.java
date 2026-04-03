@@ -172,6 +172,20 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
+    public void markTicketsAsUsedForSession(Integer sessionId) {
+        String sql = "UPDATE ticket SET status = ? WHERE id_session = ? AND status = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, TicketStatus.USED.toString());
+            pstmt.setInt(2, sessionId);
+            pstmt.setString(3, TicketStatus.SOLD.toString());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при обновлении статуса билетов", e);
+        }
+    }
+
+    @Override
     public boolean deleteByOrderId(Integer orderId) {
         String sql = "DELETE FROM ticket WHERE id_orders = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -185,7 +199,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public boolean isPlaceFree(Connection conn, Integer sessionId, Integer placeId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM ticket WHERE id_session = ? AND id_place = ? AND ticket_status IN ('RESERVED', 'SOLD') FOR UPDATE";
+        String sql = "SELECT COUNT(*) FROM ticket WHERE id_session = ? AND id_place = ? AND status IN ('RESERVED', 'SOLD') FOR UPDATE";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, sessionId);
             pstmt.setInt(2, placeId);

@@ -70,6 +70,8 @@ public class PlaceServiceImpl implements PlaceService {
     public void generatePlacesForHall(Integer hallId) {
         Hall hall = hallRepository.findById(hallId);
         if (hall == null) throw new IllegalArgumentException("Зал не найден");
+        List<Place> existing = placeRepository.findByHallId(hallId);
+        for (Place p : existing) placeRepository.delete(p.getId());
         int rows = hall.getRows();
         int seats = hall.getSeatsPerRow();
         for (int row = 1; row <= rows; row++) {
