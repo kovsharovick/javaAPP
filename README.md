@@ -3,10 +3,9 @@
 Готово:
 model,
 repository,
-service (interface)
+service
 
 Реализовать:
-service (impl),
 cli,
 хеширование!
 
