@@ -15,7 +15,7 @@ import java.util.List;
 
 public class TicketServiceImpl implements TicketService {
 
-    private static final int RESERVATION_MINUTES = 15;
+    public static final int RESERVATION_MINUTES = 15;
     private static final BigDecimal HALL_PRICE_FACTOR = BigDecimal.valueOf(0.5);
     private static final BigDecimal VIP_PRICE_FACTOR = BigDecimal.valueOf(1.5);
     private final TicketRepository ticketRepository;
@@ -136,6 +136,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> getAll() {
         return ticketRepository.findAll();
+    }
+
+    @Override
+    public int getReservationMinutes() {
+        return RESERVATION_MINUTES;
     }
 
     private BigDecimal calculatePrice(Session session, Place place) {

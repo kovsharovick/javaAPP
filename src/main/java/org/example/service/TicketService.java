@@ -13,6 +13,8 @@ public interface TicketService extends Service<Ticket, Integer> {
 
     List<Ticket> getTicketsByOrderId(Integer orderId);
 
+    int getReservationMinutes();
+
     record TicketDto(Integer sessionId, Integer placeId) {
     }
 }

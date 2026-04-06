@@ -8,6 +8,8 @@ import org.example.service.SessionService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
@@ -89,6 +91,11 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public List<Session> findByStartTimeBetween(LocalDateTime from, LocalDateTime to) {
         return sessionRepository.findByStartTimeBetween(from, to);
+    }
+
+    @Override
+    public List<Session> findByFilmIdAndDateRange(Integer filmId, LocalDateTime from, LocalDateTime to) {
+        return sessionRepository.findByFilmIdAndStartTimeBetween(filmId, from, to);
     }
 
     @Override

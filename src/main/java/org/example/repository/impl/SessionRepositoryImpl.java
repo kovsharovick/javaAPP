@@ -26,7 +26,9 @@ public class SessionRepositoryImpl implements SessionRepository {
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) session.setId(rs.getInt(1));
+                if (rs.next()) {
+                    session.setId(rs.getInt("id_session"));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при сохранении сеанса", e);
@@ -142,6 +144,24 @@ public class SessionRepositoryImpl implements SessionRepository {
             throw new RuntimeException("Ошибка при поиске сеансов по временному интервалу", e);
         }
         return sessions;
+    }
+
+    @Override
+    public List<Session> findByFilmIdAndStartTimeBetween(Integer filmId, LocalDateTime from, LocalDateTime to) {
+        String sql = "SELECT * FROM session WHERE id_film = ? AND starting BETWEEN ? AND ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, filmId);
+            pstmt.setObject(2, from);
+            pstmt.setObject(3, to);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                List<Session> sessions = new ArrayList<>();
+                while (rs.next()) sessions.add(mapResultSet(rs));
+                return sessions;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске сеансов по фильму и интервалу", e);
+        }
     }
 
     @Override

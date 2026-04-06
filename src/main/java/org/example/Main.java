@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.cli.Menu;
+import org.example.cli.CliApplication;
 
 public class Main {
     public static void main(String[] args) {
-        Menu.run();
+        new CliApplication().run();
     }
 }

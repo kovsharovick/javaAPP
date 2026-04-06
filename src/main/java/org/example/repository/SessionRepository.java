@@ -17,4 +17,6 @@ public interface SessionRepository extends Repository<Session> {
     List<Session> findByStartTimeAfter(LocalDateTime time);
 
     List<Session> findByFinishTimeBefore(LocalDateTime now);
+
+    List<Session> findByFilmIdAndStartTimeBetween(Integer filmId, LocalDateTime from, LocalDateTime to);
 }

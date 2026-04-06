@@ -23,7 +23,9 @@ public class HallRepositoryImpl implements HallRepository {
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) hall.setId(rs.getInt(1));
+                if (rs.next()) {
+                    hall.setId(rs.getInt("id_hall"));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при сохранении зала", e);

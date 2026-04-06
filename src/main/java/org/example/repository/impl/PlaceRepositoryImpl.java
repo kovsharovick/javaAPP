@@ -27,7 +27,9 @@ public class PlaceRepositoryImpl implements PlaceRepository {
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) place.setId(rs.getInt(1));
+                if (rs.next()) {
+                    place.setId(rs.getInt("id_place"));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при сохранении места", e);

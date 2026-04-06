@@ -20,6 +20,8 @@ public interface SessionService extends Service<Session, Integer> {
     //сеансы в промежуток определенного времени.
     List<Session> findByStartTimeBetween(LocalDateTime from, LocalDateTime to);
 
+    List<Session> findByFilmIdAndDateRange(Integer filmId, LocalDateTime from, LocalDateTime to);
+
     boolean existsOverlap(Integer hallId, LocalDateTime startTime, LocalDateTime endTime, Integer excludeSessionId);
 
     //сеансы после определенного времени.

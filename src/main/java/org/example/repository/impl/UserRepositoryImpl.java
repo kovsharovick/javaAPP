@@ -25,7 +25,9 @@ public class UserRepositoryImpl implements UserRepository {
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) user.setId(rs.getInt(1));
+                if (rs.next()) {
+                    user.setId(rs.getInt("id_user_data"));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при сохранении пользователя", e);

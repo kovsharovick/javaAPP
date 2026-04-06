@@ -25,7 +25,9 @@ public class TicketRepositoryImpl implements TicketRepository {
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) ticket.setId(rs.getInt(1));
+                if (rs.next()) {
+                    ticket.setId(rs.getInt("id_ticket"));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при сохранении билета", e);
@@ -46,7 +48,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    ticket.setId(rs.getInt(1));
+                    ticket.setId(rs.getInt("id_ticket"));
                 }
             }
         }
