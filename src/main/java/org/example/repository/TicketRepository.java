@@ -23,4 +23,12 @@ public interface TicketRepository extends Repository<Ticket> {
     void updateTicketStatusByOrderId(Connection conn, Integer orderId, TicketStatus oldStatus, TicketStatus newStatus) throws SQLException;
 
     void markTicketsAsUsedForSession(Integer sessionId);
+
+    List<Ticket> findByUserId(Integer userId);
+
+    List<Ticket> findBySessionIdAndStatus(Integer sessionId, TicketStatus status);
+
+    List<Ticket> findByStatus(TicketStatus status);
+
+    long countSoldTicketsBySession(Integer sessionId);
 }

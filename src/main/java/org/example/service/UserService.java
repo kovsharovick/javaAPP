@@ -11,5 +11,7 @@ public interface UserService extends Service<User, Integer>{
 
     void updateProfile(User user, String name, String email, String password);
 
+    void updateStatus(User user, boolean isAdmin);
+
     boolean existsByEmail(String email);
 }

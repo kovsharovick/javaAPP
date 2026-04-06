@@ -3,10 +3,11 @@
 Готово:
 model,
 repository,
-service
+service,
+cli
 
 Реализовать:
-cli,
-хеширование!
+тесты,
+хеширование
 
 

@@ -1,7 +1,6 @@
 package org.example.service;
 
 import org.example.model.Place;
-import org.example.repository.PlaceRepository;
 
 import java.util.List;
 

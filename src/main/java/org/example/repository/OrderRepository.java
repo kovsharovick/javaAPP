@@ -2,8 +2,8 @@ package org.example.repository;
 
 import org.example.model.Order;
 import org.example.model.OrderStatus;
-import org.example.model.TicketStatus;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -21,4 +21,10 @@ public interface OrderRepository extends Repository<Order> {
     void confirmPaymentWithConnection(Connection conn, Integer orderId) throws SQLException;
 
     List<Order> findExpiredReservations();
+
+    List<Order> findByStatus(OrderStatus status);
+
+    List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status);
+
+    BigDecimal sumRevenueByPeriod(LocalDateTime from, LocalDateTime to);
 }

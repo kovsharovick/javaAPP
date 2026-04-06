@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SessionService extends Service<Session, Integer> {
 
-    Session createSession(Integer hallId, Integer filmId, LocalDateTime startTime);
+    void createSession(Integer hallId, Integer filmId, LocalDateTime startTime);
 
     void updateSession(Session session);
 

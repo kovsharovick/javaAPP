@@ -174,6 +174,55 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
+    public List<Ticket> findByUserId(Integer userId) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT t.* FROM ticket t JOIN orders o ON t.id_orders = o.id_orders WHERE o.id_user_data = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) tickets.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при получении списка билетов по айди пользователя", e);
+        }
+        return tickets;
+    }
+
+    @Override
+    public List<Ticket> findBySessionIdAndStatus(Integer sessionId, TicketStatus status) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM ticket WHERE id_session = ? AND status = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, sessionId);
+            pstmt.setString(2, status.toString());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) tickets.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при получении списка билетов по айди сеанса и статусу", e);
+        }
+        return tickets;
+    }
+
+    @Override
+    public List<Ticket> findByStatus(TicketStatus status) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM ticket WHERE status = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, status.toString());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) tickets.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при получении списка билетов по статусу", e);
+        }
+        return tickets;
+    }
+
+    @Override
     public void markTicketsAsUsedForSession(Integer sessionId) {
         String sql = "UPDATE ticket SET status = ? WHERE id_session = ? AND status = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -184,6 +233,23 @@ public class TicketRepositoryImpl implements TicketRepository {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при обновлении статуса билетов", e);
+        }
+    }
+
+    @Override
+    public long countSoldTicketsBySession(Integer sessionId) {
+        String sql = "SELECT COUNT(*) FROM ticket WHERE id_session = ? AND status IN ('SOLD', 'RESERVED')";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, sessionId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong(1);
+                }
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при вычислении доходов", e);
         }
     }
 

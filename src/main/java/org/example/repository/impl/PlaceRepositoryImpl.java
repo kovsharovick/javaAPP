@@ -1,8 +1,6 @@
 package org.example.repository.impl;
 
 import org.example.config.DatabaseConnection;
-import org.example.model.Order;
-import org.example.model.OrderStatus;
 import org.example.model.Place;
 import org.example.model.TypePlace;
 import org.example.repository.PlaceRepository;
@@ -10,7 +8,6 @@ import org.example.repository.PlaceRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PlaceRepositoryImpl implements PlaceRepository {
 

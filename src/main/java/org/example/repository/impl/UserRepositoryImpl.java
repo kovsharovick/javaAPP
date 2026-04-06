@@ -1,14 +1,12 @@
 package org.example.repository.impl;
 
 import org.example.config.DatabaseConnection;
-import org.example.model.Session;
 import org.example.model.User;
 import org.example.repository.UserRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
 

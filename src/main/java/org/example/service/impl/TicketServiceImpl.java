@@ -139,11 +139,32 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public List<Ticket> findByUserId(Integer userId) {
+        return ticketRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Ticket> findBySessionIdAndStatus(Integer sessionId, TicketStatus status) {
+        return ticketRepository.findBySessionIdAndStatus(sessionId, status);
+    }
+
+    @Override
+    public List<Ticket> findByStatus(TicketStatus status) {
+        return ticketRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<Ticket> findBySessionId(Integer sessionId) {
+        return ticketRepository.findBySessionId(sessionId);
+    }
+
+    @Override
     public int getReservationMinutes() {
         return RESERVATION_MINUTES;
     }
 
-    private BigDecimal calculatePrice(Session session, Place place) {
+    @Override
+    public BigDecimal calculatePrice(Session session, Place place) {
         Film film = filmRepository.findById(session.getFilmId());
         Hall hall = hallRepository.findById(session.getHallId());
         if (film == null) {
@@ -154,10 +175,18 @@ public class TicketServiceImpl implements TicketService {
         }
         BigDecimal hallPrice = hall.getPrice() != null ? hall.getPrice() : BigDecimal.ZERO;
         BigDecimal basePrice = film.getPrice().add(hallPrice.multiply(HALL_PRICE_FACTOR));
+        if (place == null) {
+            return basePrice;
+        }
         if (place.getTypePlace() == TypePlace.VIP) {
             return basePrice.multiply(VIP_PRICE_FACTOR);
         }
         return basePrice;
+    }
+
+    @Override
+    public long countSoldTicketsBySession(Integer sessionId) {
+        return ticketRepository.countSoldTicketsBySession(sessionId);
     }
 
     private static class TicketData {

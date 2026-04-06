@@ -11,7 +11,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class OrderRepositoryImpl implements OrderRepository {
 
@@ -149,6 +148,57 @@ public class OrderRepositoryImpl implements OrderRepository {
             return orders;
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при поиске просроченных заказов", e);
+        }
+    }
+
+    @Override
+    public List<Order> findByStatus(OrderStatus status) {
+        String sql = "SELECT * FROM orders WHERE status = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, status.toString());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                List<Order> orders = new ArrayList<>();
+                while (rs.next()) orders.add(mapResultSet(rs));
+                return orders;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске заказов по статусу", e);
+        }
+    }
+
+    @Override
+    public List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status) {
+        String sql = "SELECT * FROM orders WHERE id_user_data = ? AND status = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, status.toString());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                List<Order> orders = new ArrayList<>();
+                while (rs.next()) orders.add(mapResultSet(rs));
+                return orders;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при поиске заказов по статусу и айди пользователя", e);
+        }
+    }
+
+    @Override
+    public BigDecimal sumRevenueByPeriod(LocalDateTime from, LocalDateTime to) {
+        String sql = "SELECT COALESCE(SUM(amount), 0) FROM orders WHERE status = 'COMPLETED' AND date_and_time BETWEEN ? AND ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, from);
+            pstmt.setObject(2, to);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBigDecimal(1);
+                }
+                return BigDecimal.ZERO;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка при вычислении доходов", e);
         }
     }
 

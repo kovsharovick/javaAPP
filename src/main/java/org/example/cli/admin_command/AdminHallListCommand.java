@@ -17,7 +17,7 @@ public class AdminHallListCommand implements Command {
 
     @Override
     public boolean isAdminOnly() {
-        return false;
+        return true;
     }
 
     @Override

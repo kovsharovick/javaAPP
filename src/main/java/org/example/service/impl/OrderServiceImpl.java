@@ -8,10 +8,12 @@ import org.example.repository.OrderRepository;
 import org.example.repository.TicketRepository;
 import org.example.service.OrderService;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -40,6 +42,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findByUserId(Integer userId) {
         return orderRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Order> findByStatus(OrderStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Неверно указан статус");
+        }
+        return orderRepository.findByStatus(status);
+    }
+
+    @Override
+    public List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Неверно указан статус");
+        }
+        return orderRepository.findByUserIdAndStatus(userId, status);
     }
 
     @Override
@@ -152,6 +170,11 @@ public class OrderServiceImpl implements OrderService {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public BigDecimal sumRevenueByPeriod(LocalDateTime from, LocalDateTime to) {
+        return orderRepository.sumRevenueByPeriod(Objects.requireNonNullElseGet(from, () -> LocalDateTime.of(1900, 1, 1, 1, 1)), to);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.example.cli.impl;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.example.cli.CommandContext;
 import org.example.model.User;
 import org.example.service.*;

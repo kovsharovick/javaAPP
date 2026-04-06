@@ -13,7 +13,6 @@ import org.example.cli.command.*;
 import org.example.cli.admin_command.*;
 
 import java.util.*;
-import java.io.PrintStream;
 import java.util.Scanner;
 
 public class CliApplication {
@@ -58,6 +57,9 @@ public class CliApplication {
         registry.register(new PayCommand());
         registry.register(new CancelOrderCommand());
         registry.register(new MyOrdersCommand());
+        registry.register(new SessionInfoCommand());
+        registry.register(new FilmInfoCommand());
+
 
         registry.register(new AdminFilmCreateCommand());
         registry.register(new AdminFilmUpdateCommand());
@@ -65,9 +67,18 @@ public class CliApplication {
         registry.register(new AdminHallCreateCommand());
         registry.register(new AdminHallListCommand());
         registry.register(new AdminHallDeleteCommand());
+        registry.register(new AdminHallUpdateCommand());
+        registry.register(new AdminOrderListCommand());
         registry.register(new AdminSessionCreateCommand());
         registry.register(new AdminSessionDeleteCommand());
+        registry.register(new AdminSessionUpdateCommand());
         registry.register(new AdminPlaceGenerateCommand());
+        registry.register(new AdminPlaceListCommand());
+        registry.register(new AdminPlaceUpdateCommand());
+        registry.register(new AdminTicketListCommand());
+        registry.register(new AdminGrantCommand());
+        registry.register(new AdminRevokeCommand());
+        registry.register(new AdminRevenueCommand());
 
         registry.register(new HelpCommand(registry.getAllCommands()));
 

@@ -25,6 +25,10 @@ public class AdminHallCreateCommand implements Command {
 
     @Override
     public void execute(CommandContext ctx, String[] args) {
+        if (args.length < 8) {
+            ctx.getOut().println("Использование: hall create --rows <число> --seats-per-row <число> --price <цена>");
+            return;
+        }
         FlagArgs flags = FlagArgs.parse(args, 2);
         if (flags.getError() != null) {
             ctx.getOut().println(flags.getError());

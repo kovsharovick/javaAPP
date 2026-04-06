@@ -5,6 +5,9 @@ import org.example.repository.UserRepository;
 import org.example.service.UserService;
 import org.example.service.PasswordHasher;
 
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String name, String email, String password, boolean isAdmin) {
+        if (email != null && !isValidEmail(email)) {
+            throw new IllegalArgumentException("Неверный формат email");
+        }
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Пользователь с таким email уже существует");
         }
@@ -39,6 +45,9 @@ public class UserServiceImpl implements UserService {
         if (currentUser == null) {
             throw new IllegalArgumentException("Пользователь не авторизован");
         }
+        if (email != null && !isValidEmail(email)) {
+            throw new IllegalArgumentException("Неверный формат email");
+        }
         if (email != null && !email.equals(currentUser.getEmail()) && userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email уже используется другим пользователем");
         }
@@ -57,6 +66,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateStatus(User user, boolean isAdmin) {
+        if (user == null) {
+            throw new IllegalArgumentException("Пользователь не найден");
+        }
+        user.setAdmin(isAdmin);
+        userRepository.update(user);
+    }
+
+    @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -66,9 +84,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    private boolean isValidEmail(String email) {
+        try {
+            new InternetAddress(email).validate();
+            return true;
+        } catch (AddressException e) {
+            return false;
+        }
     }
 }

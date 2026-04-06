@@ -8,8 +8,6 @@ import org.example.service.SessionService;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
@@ -24,7 +22,7 @@ public class SessionServiceImpl implements SessionService {
 
 
     @Override
-    public Session createSession(Integer hallId, Integer filmId, LocalDateTime startTime) {
+    public void createSession(Integer hallId, Integer filmId, LocalDateTime startTime) {
         Film film = filmRepository.findById(filmId);
         if (film == null) {
             throw new IllegalStateException("Фильм не найден");
@@ -38,7 +36,7 @@ public class SessionServiceImpl implements SessionService {
         session.setHallId(hallId);
         session.setStartTime(startTime);
         session.setFinishTime(startTime.plus(film.getDuration()));
-        return sessionRepository.save(session);
+        sessionRepository.save(session);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.example.repository.impl;
 
 import org.example.config.DatabaseConnection;
-import org.example.model.Order;
 import org.example.model.Session;
 import org.example.repository.SessionRepository;
 
@@ -9,7 +8,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class SessionRepositoryImpl implements SessionRepository {
 

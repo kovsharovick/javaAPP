@@ -27,6 +27,10 @@ public class AdminSessionCreateCommand implements Command {
 
     @Override
     public void execute(CommandContext ctx, String[] args) {
+        if (args.length < 8) {
+            ctx.getOut().println("Использование: session create --hall <id> --film <id> --start \"yyyy-MM-dd HH:mm\"");
+            return;
+        }
         FlagArgs flags = FlagArgs.parse(args, 2);
         if (flags.getError() != null) {
             ctx.getOut().println(flags.getError());

@@ -26,6 +26,10 @@ public class AdminFilmUpdateCommand implements Command {
 
     @Override
     public void execute(CommandContext ctx, String[] args) {
+        if (args.length < 4) {
+            ctx.getOut().println("Использование: film update --id <id> [--name <name>] [--duration <min>] [--price <price>] [--description <text>] [--poster-url <url>]");
+            return;
+        }
         FlagArgs flags = FlagArgs.parse(args, 2);
         if (flags.getError() != null) {
             ctx.getOut().println(flags.getError());

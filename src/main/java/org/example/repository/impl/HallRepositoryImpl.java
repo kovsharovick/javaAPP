@@ -7,7 +7,6 @@ import org.example.repository.HallRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class HallRepositoryImpl implements HallRepository {
 
