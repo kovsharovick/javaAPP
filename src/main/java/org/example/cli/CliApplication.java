@@ -50,6 +50,7 @@ public class CliApplication {
                 try {
                     Thread.sleep(60000);
                     orderService.cancelExpiredReservations();
+                    sessionService.markFinishedSessions();
                 } catch (InterruptedException e) {
                     break;
                 } catch (Exception e) {
