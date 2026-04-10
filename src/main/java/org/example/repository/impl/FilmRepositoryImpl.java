@@ -3,6 +3,7 @@ package org.example.repository.impl;
 import org.example.config.DatabaseConnection;
 import org.example.model.Film;
 import org.example.repository.FilmRepository;
+import org.postgresql.util.PGInterval;
 
 import java.sql.*;
 import java.time.Duration;
@@ -18,7 +19,7 @@ public class FilmRepositoryImpl implements FilmRepository {
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, film.getName());
-            pstmt.setObject(2, film.getDuration());
+            pstmt.setObject(2, film.getDuration(), java.sql.Types.OTHER);
             pstmt.setBigDecimal(3, film.getPrice());
             pstmt.setString(4, film.getDescription());
             pstmt.setString(5, film.getPosterUrl());
@@ -72,7 +73,7 @@ public class FilmRepositoryImpl implements FilmRepository {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, film.getName());
-            pstmt.setObject(2, film.getDuration());
+            pstmt.setObject(2, film.getDuration(), java.sql.Types.OTHER);
             pstmt.setBigDecimal(3, film.getPrice());
             pstmt.setString(4, film.getDescription());
             pstmt.setString(5, film.getPosterUrl());
@@ -112,10 +113,18 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     private Film mapResultSet(ResultSet rs) throws SQLException {
+        Object intervalObj = rs.getObject("duration");
+        Duration duration;
+        if (intervalObj instanceof PGInterval pgInterval) {
+            long totalMinutes = pgInterval.getHours() * 60L + pgInterval.getMinutes();
+            duration = Duration.ofMinutes(totalMinutes);
+        } else {
+            duration = Duration.parse(rs.getString("duration"));
+        }
         return new Film(
                 rs.getInt("id_film"),
                 rs.getString("name"),
-                rs.getObject("duration", Duration.class),
+                duration,
                 rs.getBigDecimal("price"),
                 rs.getString("description"),
                 rs.getString("poster_url")

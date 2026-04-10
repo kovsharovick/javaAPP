@@ -2,8 +2,11 @@ package org.example.service.impl;
 
 import org.example.model.Film;
 import org.example.model.Session;
+import org.example.model.Ticket;
+import org.example.model.TicketStatus;
 import org.example.repository.FilmRepository;
 import org.example.repository.SessionRepository;
+import org.example.repository.TicketRepository;
 import org.example.service.FilmService;
 
 import java.time.LocalDate;
@@ -13,11 +16,13 @@ import java.util.stream.Collectors;
 
 public class FilmServiceImpl implements FilmService {
 
-    private final SessionRepository sessionRepositoy;
+    private final SessionRepository sessionRepository;
     private final FilmRepository filmRepository;
+    private final TicketRepository ticketRepository;
 
-    public FilmServiceImpl(SessionRepository sessionRepositoy, FilmRepository filmRepository) {
-        this.sessionRepositoy = sessionRepositoy;
+    public FilmServiceImpl(SessionRepository sessionRepository, FilmRepository filmRepository, TicketRepository ticketRepository) {
+        this.sessionRepository = sessionRepository;
+        this.ticketRepository = ticketRepository;
         this.filmRepository = filmRepository;
     }
 
@@ -29,12 +34,24 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void update(Film film) {
+        Film existing = filmRepository.findById(film.getId());
+        if (existing == null) throw new IllegalArgumentException("Фильм не найден");
+
+        if (!existing.getDuration().equals(film.getDuration())) {
+            List<Session> sessions = sessionRepository.findByFilmId(film.getId());
+            for (Session s : sessions) {
+                List<Ticket> tickets = ticketRepository.findBySessionId(s.getId());
+                if (tickets.stream().anyMatch(t -> t.getTicketStatus() == TicketStatus.SOLD || t.getTicketStatus() == TicketStatus.RESERVED)) {
+                    throw new IllegalStateException("Нельзя изменить длительность фильма, так как есть сеансы с купленными билетами");
+                }
+            }
+        }
         filmRepository.update(film);
     }
 
     @Override
     public boolean delete(Integer id) {
-        List<Session> sessions = sessionRepositoy.findByFilmId(id);
+        List<Session> sessions = sessionRepository.findByFilmId(id);
         if (!sessions.isEmpty()) {
             throw new IllegalStateException("Невозможно удалить фильм, так как существуют сеансы с ним");
         }
@@ -48,7 +65,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public List<Film> findUsingFilm() {
-        List<Session> sessions = sessionRepositoy.findAll();
+        List<Session> sessions = sessionRepository.findAll();
         Set<Integer> filmId = sessions.stream()
                 .filter(s -> s.getStartTime().isAfter(LocalDate.now().atStartOfDay()))
                 .map(Session::getFilmId)

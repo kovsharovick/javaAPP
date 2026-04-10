@@ -23,7 +23,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             pstmt.setInt(1, order.getUserId());
             pstmt.setBigDecimal(2, order.getAmount());
             pstmt.setObject(3, order.getDateTime());
-            pstmt.setString(4, (order.getOrderStatus()).toString());
+            pstmt.setObject(4, OrderStatus.WAIT_PAYMENT.toString(), java.sql.Types.OTHER);
             pstmt.setObject(5, order.getReservedUntil());
             pstmt.executeUpdate();
 
@@ -46,7 +46,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             pstmt.setInt(1, userId);
             pstmt.setBigDecimal(2, BigDecimal.ZERO);
             pstmt.setObject(3, LocalDateTime.now());
-            pstmt.setString(4, OrderStatus.WAIT_PAYMENT.toString());
+            pstmt.setObject(4, OrderStatus.WAIT_PAYMENT.toString(), java.sql.Types.OTHER);
             pstmt.setObject(5, LocalDateTime.now().plusMinutes(reservedTime));
 
             pstmt.executeUpdate();
@@ -105,7 +105,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             pstmt.setInt(1, order.getUserId());
             pstmt.setBigDecimal(2, order.getAmount());
             pstmt.setObject(3, order.getDateTime());
-            pstmt.setString(4, (order.getOrderStatus()).toString());
+            pstmt.setObject(4, order.getOrderStatus().toString(), java.sql.Types.OTHER);
             pstmt.setInt(5, order.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -117,7 +117,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public void updateWithConnection(Connection conn, Order order) throws SQLException {
         String sql = "UPDATE orders SET status=?, reserved_until=?, amount=? WHERE id_orders=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, order.getOrderStatus().toString());
+            pstmt.setObject(1, order.getOrderStatus().toString(), java.sql.Types.OTHER);
             pstmt.setObject(2, order.getReservedUntil());
             pstmt.setBigDecimal(3, order.getAmount());
             pstmt.setInt(4, order.getId());
@@ -156,7 +156,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         String sql = "SELECT * FROM orders WHERE status = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, status.toString());
+            pstmt.setObject(1, status.toString(), java.sql.Types.OTHER);
             try (ResultSet rs = pstmt.executeQuery()) {
                 List<Order> orders = new ArrayList<>();
                 while (rs.next()) orders.add(mapResultSet(rs));
@@ -173,7 +173,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
-            pstmt.setString(2, status.toString());
+            pstmt.setObject(2, status.toString(), java.sql.Types.OTHER);
             try (ResultSet rs = pstmt.executeQuery()) {
                 List<Order> orders = new ArrayList<>();
                 while (rs.next()) orders.add(mapResultSet(rs));
@@ -206,13 +206,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     public void cancelOrderWithConnection(Connection conn, Integer orderId) throws SQLException {
         String sqlOrder = "UPDATE orders SET status=? WHERE id_orders=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlOrder)) {
-            pstmt.setString(1, OrderStatus.CANCELED.toString());
+            pstmt.setObject(1, OrderStatus.CANCELED.toString(), java.sql.Types.OTHER);
             pstmt.setInt(2, orderId);
             pstmt.executeUpdate();
         }
         String sqlTicket = "UPDATE ticket SET status=? WHERE id_orders=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlTicket)) {
-            pstmt.setString(1, TicketStatus.CANCELED.toString());
+            pstmt.setObject(1, TicketStatus.CANCELED.toString(), java.sql.Types.OTHER);
             pstmt.setInt(2, orderId);
             pstmt.executeUpdate();
         }
@@ -222,13 +222,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     public void confirmPaymentWithConnection(Connection conn, Integer orderId) throws SQLException {
         String sqlOrder = "UPDATE orders SET status=? WHERE id_orders=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlOrder)) {
-            pstmt.setString(1, OrderStatus.COMPLETED.toString());
+            pstmt.setObject(1, OrderStatus.COMPLETED.toString(), java.sql.Types.OTHER);
             pstmt.setInt(2, orderId);
             pstmt.executeUpdate();
         }
         String sqlTicket = "UPDATE ticket SET status=? WHERE id_orders=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlTicket)) {
-            pstmt.setString(1, TicketStatus.SOLD.toString());
+            pstmt.setObject(1, TicketStatus.SOLD.toString(), java.sql.Types.OTHER);
             pstmt.setInt(2, orderId);
             pstmt.executeUpdate();
         }

@@ -41,7 +41,8 @@ public class ShowFreePlacesCommand implements Command {
         for (Map.Entry<Integer, List<Place>> entry : byRow.entrySet()) {
             ctx.getOut().print("Ряд " + entry.getKey() + ": ");
             String seats = entry.getValue().stream()
-                    .map(p -> String.valueOf(p.getSeat())).collect(Collectors.joining(", "));
+                    .map(p -> p.getSeat() + "(id=" + p.getId() + ")")
+                    .collect(Collectors.joining(", "));
             ctx.getOut().println(seats);
         }
     }

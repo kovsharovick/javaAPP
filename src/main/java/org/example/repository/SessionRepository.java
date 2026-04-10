@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SessionRepository extends Repository<Session> {
+
     List<Session> findByFilmId(Integer filmId);
 
     List<Session> findByHallId(Integer hallId);

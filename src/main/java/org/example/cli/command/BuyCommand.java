@@ -33,7 +33,7 @@ public class BuyCommand implements Command {
             ctx.getOut().println("Необходимо войти в систему.");
             return;
         }
-        FlagArgs flags = FlagArgs.parse(args, 2);
+        FlagArgs flags = FlagArgs.parse(args, 1);
         if (flags.getError() != null) {
             ctx.getOut().println(flags.getError());
             return;

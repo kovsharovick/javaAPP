@@ -53,12 +53,7 @@ public class PlaceServiceImpl implements PlaceService {
                     }
                 }
             } else {
-                //ставим номер ряда и места равные 0, это служит меткой - его больше нет.
-                Place place = placeRepository.findById(id);
-                place.setSeat(0);
-                place.setRows(0);
-                placeRepository.update(place);
-                return true;
+                throw new IllegalStateException("Невозможно удалить место, так как существуют неиспользованные билеты с ним");
             }
             return placeRepository.delete(id);
         }

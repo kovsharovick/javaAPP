@@ -21,7 +21,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             pstmt.setInt(2, ticket.getPlaceId());
             pstmt.setInt(3, ticket.getSessionId());
             pstmt.setBigDecimal(4, ticket.getPrice());
-            pstmt.setString(5, (ticket.getTicketStatus()).toString());
+            pstmt.setObject(5, ticket.getTicketStatus().toString(), java.sql.Types.OTHER);
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -43,7 +43,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             pstmt.setInt(2, ticket.getPlaceId());
             pstmt.setInt(3, ticket.getSessionId());
             pstmt.setBigDecimal(4, ticket.getPrice());
-            pstmt.setString(5, ticket.getTicketStatus().toString());
+            pstmt.setObject(5, ticket.getTicketStatus().toString(), java.sql.Types.OTHER);
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -58,9 +58,9 @@ public class TicketRepositoryImpl implements TicketRepository {
     public void updateTicketStatusByOrderId(Connection conn, Integer orderId, TicketStatus oldStatus, TicketStatus newStatus) throws SQLException {
         String sql = "UPDATE ticket SET status=? WHERE id_orders=? AND status=?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, newStatus.toString());
+            pstmt.setObject(1, newStatus.toString(), java.sql.Types.OTHER);
             pstmt.setInt(2, orderId);
-            pstmt.setString(3, oldStatus.toString());
+            pstmt.setObject(3, oldStatus.toString(), java.sql.Types.OTHER);
             pstmt.executeUpdate();
         }
     }
@@ -105,7 +105,7 @@ public class TicketRepositoryImpl implements TicketRepository {
             pstmt.setInt(2, ticket.getPlaceId());
             pstmt.setInt(3, ticket.getSessionId());
             pstmt.setBigDecimal(4, ticket.getPrice());
-            pstmt.setString(5, (ticket.getTicketStatus()).toString());
+            pstmt.setObject(5, ticket.getTicketStatus().toString(), java.sql.Types.OTHER);
             pstmt.setInt(6, ticket.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -196,7 +196,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, sessionId);
-            pstmt.setString(2, status.toString());
+            pstmt.setObject(2, status.toString(), java.sql.Types.OTHER);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) tickets.add(mapResultSet(rs));
             }
@@ -212,7 +212,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         String sql = "SELECT * FROM ticket WHERE status = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, status.toString());
+            pstmt.setObject(1, status.toString(), java.sql.Types.OTHER);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) tickets.add(mapResultSet(rs));
             }
@@ -227,9 +227,9 @@ public class TicketRepositoryImpl implements TicketRepository {
         String sql = "UPDATE ticket SET status = ? WHERE id_session = ? AND status = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, TicketStatus.USED.toString());
+            pstmt.setObject(1, TicketStatus.USED.toString(), java.sql.Types.OTHER);
             pstmt.setInt(2, sessionId);
-            pstmt.setString(3, TicketStatus.SOLD.toString());
+            pstmt.setObject(3, TicketStatus.SOLD.toString(), java.sql.Types.OTHER);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка при обновлении статуса билетов", e);
@@ -267,17 +267,14 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public boolean isPlaceFree(Connection conn, Integer sessionId, Integer placeId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM ticket WHERE id_session = ? AND id_place = ? AND status IN ('RESERVED', 'SOLD') FOR UPDATE";
+        String sql = "SELECT 1 FROM ticket WHERE id_session = ? AND id_place = ? AND status IN ('RESERVED', 'SOLD') FOR UPDATE";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, sessionId);
             pstmt.setInt(2, placeId);
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) == 0;
-                }
+                return !rs.next();
             }
         }
-        return true;
     }
 
     private Ticket mapResultSet(ResultSet rs) throws SQLException {

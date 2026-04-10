@@ -37,13 +37,28 @@ public class CliApplication {
         AuthService authService = new AuthServiceImpl(userRepository, authContext, passwordHasher);
 
         UserService userService = new UserServiceImpl(userRepository, passwordHasher);
-        FilmService filmService = new FilmServiceImpl(sessionRepository, filmRepository);
+        FilmService filmService = new FilmServiceImpl(sessionRepository, filmRepository, ticketRepository);
         HallService hallService = new HallServiceImpl(hallRepository, sessionRepository, placeRepository);
         PlaceService placeService = new PlaceServiceImpl(placeRepository, hallRepository, ticketRepository, sessionRepository);
         SessionService sessionService = new SessionServiceImpl(sessionRepository, filmRepository, ticketRepository);
         OrderService orderService = new OrderServiceImpl(orderRepository, ticketRepository);
         TicketService ticketService = new TicketServiceImpl(ticketRepository, orderRepository, sessionRepository,
                 placeRepository, filmRepository, hallRepository, userRepository, authContext);
+
+        Thread cancellationThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(60000);
+                    orderService.cancelExpiredReservations();
+                } catch (InterruptedException e) {
+                    break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        cancellationThread.setDaemon(true);
+        cancellationThread.start();
 
         CommandRegistry registry = new CommandRegistry();
         registry.register(new LoginCommand());
@@ -57,6 +72,7 @@ public class CliApplication {
         registry.register(new PayCommand());
         registry.register(new CancelOrderCommand());
         registry.register(new MyOrdersCommand());
+        registry.register(new MyTicketsCommand());
         registry.register(new SessionInfoCommand());
         registry.register(new FilmInfoCommand());
 

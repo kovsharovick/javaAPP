@@ -41,6 +41,19 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void updateSession(Session session) {
+        Session existing = sessionRepository.findById(session.getId());
+        if (existing == null) throw new IllegalArgumentException("Сеанс не найден");
+
+        List<Ticket> tickets = ticketRepository.findBySessionId(session.getId());
+        boolean hasSoldTickets = tickets.stream()
+                .anyMatch(t -> t.getTicketStatus() == TicketStatus.SOLD || t.getTicketStatus() == TicketStatus.RESERVED);
+        if (hasSoldTickets) {
+            if (!existing.getHallId().equals(session.getHallId()) ||
+                    !existing.getFilmId().equals(session.getFilmId()) ||
+                    !existing.getStartTime().equals(session.getStartTime())) {
+                throw new IllegalStateException("Нельзя изменить зал, фильм или время сеанса, так как на него уже проданы билеты");
+            }
+        }
         sessionRepository.update(session);
     }
 
@@ -65,11 +78,7 @@ public class SessionServiceImpl implements SessionService {
                     }
                 }
             } else {
-                //ставим длительность сеанса 0 секунд, это служит меткой - его больше нет.
-                Session session = sessionRepository.findById(id);
-                session.setFinishTime(session.getStartTime());
-                sessionRepository.update(session);
-                return true;
+                throw new IllegalStateException("Невозможно удалить сеанс, так как существуют неиспользованные билеты с ним");
             }
             return sessionRepository.delete(id);
         }

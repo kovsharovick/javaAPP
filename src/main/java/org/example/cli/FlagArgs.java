@@ -21,11 +21,30 @@ public class FlagArgs {
                 parsed.error = "Ожидался флаг, получено: " + token;
                 return parsed;
             }
-            if (i + 1 >= args.length || args[i + 1].startsWith("--")) {
+            StringBuilder valueBuilder = new StringBuilder();
+            int j = i + 1;
+            if (j >= args.length) {
                 parsed.error = "Не указано значение параметра " + token;
                 return parsed;
             }
-            parsed.values.computeIfAbsent(token, k -> new ArrayList<>()).add(args[++i]);
+            if (args[j].startsWith("\"")) {
+                valueBuilder.append(args[j].substring(1));
+                j++;
+                while (j < args.length && !args[j].endsWith("\"")) {
+                    valueBuilder.append(" ").append(args[j]);
+                    j++;
+                }
+                if (j < args.length && args[j].endsWith("\"")) {
+                    valueBuilder.append(" ").append(args[j].substring(0, args[j].length() - 1));
+                } else {
+                    parsed.error = "Не закрыта кавычка для значения " + token;
+                    return parsed;
+                }
+                parsed.values.computeIfAbsent(token, k -> new ArrayList<>()).add(valueBuilder.toString());
+                i = j;
+            } else {
+                parsed.values.computeIfAbsent(token, k -> new ArrayList<>()).add(args[++i]);
+            }
         }
         return parsed;
     }

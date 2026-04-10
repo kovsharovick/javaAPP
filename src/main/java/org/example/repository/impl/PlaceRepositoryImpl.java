@@ -20,7 +20,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
             pstmt.setInt(1, place.getHallId());
             pstmt.setInt(2, place.getRows());
             pstmt.setInt(3, place.getSeat());
-            pstmt.setString(4, (place.getTypePlace()).toString());
+            pstmt.setObject(4, place.getTypePlace().toString(), java.sql.Types.OTHER);
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -73,7 +73,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
             pstmt.setInt(1, place.getHallId());
             pstmt.setInt(2, place.getRows());
             pstmt.setInt(3, place.getSeat());
-            pstmt.setString(4, (place.getTypePlace()).toString());
+            pstmt.setObject(4, place.getTypePlace().toString(), java.sql.Types.OTHER);
             pstmt.setInt(5, place.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {

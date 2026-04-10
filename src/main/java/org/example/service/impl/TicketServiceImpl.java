@@ -11,11 +11,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 public class TicketServiceImpl implements TicketService {
 
-    public static final int RESERVATION_MINUTES = 15;
+    public static final int RESERVATION_MINUTES = 2;
     private static final BigDecimal HALL_PRICE_FACTOR = BigDecimal.valueOf(0.5);
     private static final BigDecimal VIP_PRICE_FACTOR = BigDecimal.valueOf(1.5);
     private final TicketRepository ticketRepository;
@@ -44,6 +46,14 @@ public class TicketServiceImpl implements TicketService {
         User currentUser = authContext.getCurrentUser();
         if (currentUser == null) throw new IllegalStateException("Необходимо войти в систему");
         Integer userId = currentUser.getId();
+
+        Set<String> uniqueTickets = new HashSet<>();
+        for (TicketDto dto : tickets) {
+            String key = dto.sessionId() + ":" + dto.placeId();
+            if (!uniqueTickets.add(key)) {
+                throw new IllegalArgumentException("Нельзя купить два одинаковых билета: " + key);
+            }
+        }
 
         List<TicketData> ticketDataList = new ArrayList<>();
         for (TicketDto dto : tickets) {

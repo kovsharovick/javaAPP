@@ -27,7 +27,7 @@ public class AdminSessionUpdateCommand implements Command {
 
     @Override
     public void execute(CommandContext ctx, String[] args) {
-        if (args.length < 10) {
+        if (args.length < 9) {
             ctx.getOut().println("Использование: session update --id <id> --hall <id> --film <id> --start \"yyyy-MM-dd HH:mm\"");
             return;
         }
