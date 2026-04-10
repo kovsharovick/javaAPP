@@ -4,10 +4,10 @@
 model,
 repository,
 service,
-cli
+cli,
+test
 
 Реализовать:
-тесты,
 хеширование
 
 
