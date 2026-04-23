@@ -1,0 +1,64 @@
+# Compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/
+mvnw
+mvnw.cmd
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# NetBeans
+nb-configuration.xml
+nbproject/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Database configuration (if it contains real credentials)
+# Если в db.properties реальные пароли – закоммитьте шаблон, а сам файл игнорируйте.
+db.properties
+
+# Sensitive files
+*.key
+*.pem
+*.crt
+*.p12
+
+# Other
+*.tmp
+*.bak
+*.swp
+*~
