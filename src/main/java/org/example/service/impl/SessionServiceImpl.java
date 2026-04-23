@@ -4,6 +4,7 @@ import org.example.model.*;
 import org.example.repository.FilmRepository;
 import org.example.repository.SessionRepository;
 import org.example.repository.TicketRepository;
+import org.example.service.AuthContext;
 import org.example.service.SessionService;
 
 import java.time.LocalDateTime;
@@ -13,16 +14,19 @@ public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final FilmRepository filmRepository;
     private final TicketRepository ticketRepository;
+    private final AuthContext authContext;
 
-    public SessionServiceImpl(SessionRepository sessionRepository, FilmRepository filmRepository, TicketRepository ticketRepository) {
+    public SessionServiceImpl(SessionRepository sessionRepository, FilmRepository filmRepository, TicketRepository ticketRepository, AuthContext authContext) {
         this.sessionRepository = sessionRepository;
         this.filmRepository = filmRepository;
         this.ticketRepository = ticketRepository;
+        this.authContext = authContext;
     }
 
 
     @Override
     public void createSession(Integer hallId, Integer filmId, LocalDateTime startTime) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         Film film = filmRepository.findById(filmId);
         if (film == null) {
             throw new IllegalStateException("Фильм не найден");
@@ -41,6 +45,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void updateSession(Session session) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         Session existing = sessionRepository.findById(session.getId());
         if (existing == null) throw new IllegalArgumentException("Сеанс не найден");
 
@@ -67,6 +72,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public boolean delete(Integer id, boolean deleteWithHistory) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         List<Ticket> tickets = ticketRepository.findBySessionId(id);
         if (!tickets.isEmpty()) {
             if (deleteWithHistory) {

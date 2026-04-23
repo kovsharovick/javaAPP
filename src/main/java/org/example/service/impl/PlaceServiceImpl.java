@@ -5,6 +5,7 @@ import org.example.repository.HallRepository;
 import org.example.repository.PlaceRepository;
 import org.example.repository.SessionRepository;
 import org.example.repository.TicketRepository;
+import org.example.service.AuthContext;
 import org.example.service.PlaceService;
 
 import java.util.List;
@@ -17,12 +18,14 @@ public class PlaceServiceImpl implements PlaceService {
     private final HallRepository hallRepository;
     private final TicketRepository ticketRepository;
     private final SessionRepository sessionRepository;
+    private final AuthContext authContext;
 
-    public PlaceServiceImpl(PlaceRepository placeRepository, HallRepository hallRepository, TicketRepository ticketRepository, SessionRepository sessionRepository) {
+    public PlaceServiceImpl(PlaceRepository placeRepository, HallRepository hallRepository, TicketRepository ticketRepository, SessionRepository sessionRepository, AuthContext authContext) {
         this.placeRepository = placeRepository;
         this.hallRepository = hallRepository;
         this.ticketRepository = ticketRepository;
         this.sessionRepository = sessionRepository;
+        this.authContext = authContext;
     }
 
     @Override
@@ -32,16 +35,19 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Place save(Place place) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return placeRepository.save(place);
     }
 
     @Override
     public void update(Place place) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         placeRepository.update(place);
     }
 
     @Override
     public boolean delete(Integer id, boolean deleteWithHistory) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         List<Ticket> tickets = ticketRepository.findByPlaceId(id);
         if (!tickets.isEmpty()) {
             if (deleteWithHistory) {
@@ -63,6 +69,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void generatePlacesForHall(Integer hallId) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         Hall hall = hallRepository.findById(hallId);
         if (hall == null) throw new IllegalArgumentException("Зал не найден");
         List<Place> existing = placeRepository.findByHallId(hallId);

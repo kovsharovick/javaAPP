@@ -6,6 +6,7 @@ import org.example.model.OrderStatus;
 import org.example.model.Ticket;
 import org.example.repository.OrderRepository;
 import org.example.repository.TicketRepository;
+import org.example.service.AuthContext;
 import org.example.service.OrderService;
 
 import java.math.BigDecimal;
@@ -19,11 +20,12 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final TicketRepository ticketRepository;
-    //private static final int RESERVATION_MINUTES = 15;
+    private final AuthContext authContext;
 
-    public OrderServiceImpl(OrderRepository orderRepository, TicketRepository ticketRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, TicketRepository ticketRepository, AuthContext authContext) {
         this.orderRepository = orderRepository;
         this.ticketRepository = ticketRepository;
+        this.authContext = authContext;
     }
 
     /*
@@ -41,11 +43,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findByUserId(Integer userId) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return orderRepository.findByUserId(userId);
     }
 
     @Override
     public List<Order> findByStatus(OrderStatus status) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         if (status == null) {
             throw new IllegalArgumentException("Неверно указан статус");
         }
@@ -54,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         if (status == null) {
             throw new IllegalArgumentException("Неверно указан статус");
         }
@@ -62,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrderStatus(Integer orderId, OrderStatus status) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         Order order = orderRepository.findById(orderId);
         if (order == null) {
             throw new IllegalArgumentException("Заказ не найден");
@@ -103,6 +109,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderWithTickets getOrderWithTickets(Integer orderId) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         Order order = orderRepository.findById(orderId);
         if (order == null) throw new IllegalArgumentException("Заказ не найден");
         List<Ticket> tickets = ticketRepository.findByOrderId(orderId);
@@ -174,16 +181,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public BigDecimal sumRevenueByPeriod(LocalDateTime from, LocalDateTime to) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return orderRepository.sumRevenueByPeriod(Objects.requireNonNullElseGet(from, () -> LocalDateTime.of(1900, 1, 1, 1, 1)), to);
     }
 
     @Override
     public Order getById(Integer id) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return orderRepository.findById(id);
     }
 
     @Override
     public List<Order> getAll() {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return orderRepository.findAll();
     }
 }

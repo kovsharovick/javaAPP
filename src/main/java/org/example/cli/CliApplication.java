@@ -32,16 +32,16 @@ public class CliApplication {
         OrderRepository orderRepository = new OrderRepositoryImpl();
         TicketRepository ticketRepository = new TicketRepositoryImpl();
 
-        PasswordHasher passwordHasher = new PasswordHasher(); // или заглушка
+        PasswordHasher passwordHasher = new PasswordHasher();
         AuthContext authContext = new AuthContextImpl();
         AuthService authService = new AuthServiceImpl(userRepository, authContext, passwordHasher);
 
-        UserService userService = new UserServiceImpl(userRepository, passwordHasher);
-        FilmService filmService = new FilmServiceImpl(sessionRepository, filmRepository, ticketRepository);
-        HallService hallService = new HallServiceImpl(hallRepository, sessionRepository, placeRepository);
-        PlaceService placeService = new PlaceServiceImpl(placeRepository, hallRepository, ticketRepository, sessionRepository);
-        SessionService sessionService = new SessionServiceImpl(sessionRepository, filmRepository, ticketRepository);
-        OrderService orderService = new OrderServiceImpl(orderRepository, ticketRepository);
+        UserService userService = new UserServiceImpl(userRepository, passwordHasher, authContext);
+        FilmService filmService = new FilmServiceImpl(sessionRepository, filmRepository, ticketRepository, authContext);
+        HallService hallService = new HallServiceImpl(hallRepository, sessionRepository, placeRepository, authContext);
+        PlaceService placeService = new PlaceServiceImpl(placeRepository, hallRepository, ticketRepository, sessionRepository, authContext);
+        SessionService sessionService = new SessionServiceImpl(sessionRepository, filmRepository, ticketRepository, authContext);
+        OrderService orderService = new OrderServiceImpl(orderRepository, ticketRepository, authContext);
         TicketService ticketService = new TicketServiceImpl(ticketRepository, orderRepository, sessionRepository,
                 placeRepository, filmRepository, hallRepository, userRepository, authContext);
 

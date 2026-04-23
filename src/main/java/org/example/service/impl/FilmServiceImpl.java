@@ -7,6 +7,7 @@ import org.example.model.TicketStatus;
 import org.example.repository.FilmRepository;
 import org.example.repository.SessionRepository;
 import org.example.repository.TicketRepository;
+import org.example.service.AuthContext;
 import org.example.service.FilmService;
 
 import java.time.LocalDate;
@@ -19,21 +20,25 @@ public class FilmServiceImpl implements FilmService {
     private final SessionRepository sessionRepository;
     private final FilmRepository filmRepository;
     private final TicketRepository ticketRepository;
+    private final AuthContext authContext;
 
-    public FilmServiceImpl(SessionRepository sessionRepository, FilmRepository filmRepository, TicketRepository ticketRepository) {
+    public FilmServiceImpl(SessionRepository sessionRepository, FilmRepository filmRepository, TicketRepository ticketRepository, AuthContext authContext) {
         this.sessionRepository = sessionRepository;
         this.ticketRepository = ticketRepository;
         this.filmRepository = filmRepository;
+        this.authContext = authContext;
     }
 
 
     @Override
     public Film save(Film film) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return filmRepository.save(film);
     }
 
     @Override
     public void update(Film film) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         Film existing = filmRepository.findById(film.getId());
         if (existing == null) throw new IllegalArgumentException("Фильм не найден");
 
@@ -51,6 +56,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public boolean delete(Integer id) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         List<Session> sessions = sessionRepository.findByFilmId(id);
         if (!sessions.isEmpty()) {
             throw new IllegalStateException("Невозможно удалить фильм, так как существуют сеансы с ним");

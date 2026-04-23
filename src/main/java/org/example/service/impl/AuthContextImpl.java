@@ -25,4 +25,9 @@ public class AuthContextImpl implements AuthContext {
     public boolean isAuthenticated() {
         return currentUser != null;
     }
+
+    @Override
+    public boolean isAdmin() {
+        return currentUser != null && currentUser.getAdmin();
+    }
 }

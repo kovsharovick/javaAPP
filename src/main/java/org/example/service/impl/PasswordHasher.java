@@ -1,17 +1,30 @@
 package org.example.service.impl;
 
-import java.util.Objects;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordHasher implements org.example.service.PasswordHasher {
 
+    // Стоимость (log rounds). 12 – хороший баланс скорости и безопасности.
+    private static final int LOG_ROUNDS = 12;
+
     @Override
     public String hash(String rawPassword) {
-        return rawPassword;
+        if (rawPassword == null) {
+            throw new IllegalArgumentException("Пароль не может быть null");
+        }
+        return BCrypt.hashpw(rawPassword, BCrypt.gensalt(LOG_ROUNDS));
     }
 
     @Override
     public boolean matches(String rawPassword, String storedHash) {
-        return Objects.equals(rawPassword, storedHash);
+        if (rawPassword == null || storedHash == null) {
+            return false;
+        }
+        try {
+            return BCrypt.checkpw(rawPassword, storedHash);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 

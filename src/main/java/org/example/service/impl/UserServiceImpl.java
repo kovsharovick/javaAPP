@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import org.example.model.User;
 import org.example.repository.UserRepository;
+import org.example.service.AuthContext;
 import org.example.service.UserService;
 import org.example.service.PasswordHasher;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
+    private final AuthContext authContext;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
+    public UserServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher, AuthContext authContext) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
+        this.authContext = authContext;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer id) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return userRepository.findById(id);
     }
 
@@ -44,6 +48,9 @@ public class UserServiceImpl implements UserService {
     public void updateProfile(User currentUser, String name, String email, String password) {
         if (currentUser == null) {
             throw new IllegalArgumentException("Пользователь не авторизован");
+        }
+        if (!authContext.isAdmin() && currentUser != authContext.getCurrentUser()) {
+            throw new SecurityException("Доступно только администраторам!");
         }
         if (email != null && !isValidEmail(email)) {
             throw new IllegalArgumentException("Неверный формат email");
@@ -70,22 +77,28 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new IllegalArgumentException("Пользователь не найден");
         }
+        if (!authContext.isAdmin() && user != authContext.getCurrentUser()) {
+            throw new SecurityException("Доступно только администраторам!");
+        }
         user.setAdmin(isAdmin);
         userRepository.update(user);
     }
 
     @Override
     public boolean existsByEmail(String email) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return userRepository.existsByEmail(email);
     }
 
     @Override
     public User getById(Integer id) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return userRepository.findById(id);
     }
 
     @Override
     public List<User> getAll() {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return userRepository.findAll();
     }
 

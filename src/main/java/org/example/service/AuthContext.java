@@ -10,4 +10,6 @@ public interface AuthContext {
     void clear();
 
     boolean isAuthenticated();
+
+    boolean isAdmin();
 }

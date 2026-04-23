@@ -10,10 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
 
 public class TicketServiceImpl implements TicketService {
 
@@ -135,36 +132,46 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getTicketsByOrderId(Integer orderId) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findByOrderId(orderId);
     }
 
     @Override
     public Ticket getById(Integer id) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findById(id);
     }
 
     @Override
     public List<Ticket> getAll() {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findAll();
     }
 
     @Override
     public List<Ticket> findByUserId(Integer userId) {
+        User current = authContext.getCurrentUser();
+        if (current == null || (!authContext.isAdmin() && !current.getId().equals(userId))) {
+            throw new SecurityException("Доступно только администраторам!");
+        }
         return ticketRepository.findByUserId(userId);
     }
 
     @Override
     public List<Ticket> findBySessionIdAndStatus(Integer sessionId, TicketStatus status) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findBySessionIdAndStatus(sessionId, status);
     }
 
     @Override
     public List<Ticket> findByStatus(TicketStatus status) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findByStatus(status);
     }
 
     @Override
     public List<Ticket> findBySessionId(Integer sessionId) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findBySessionId(sessionId);
     }
 
@@ -196,6 +203,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public long countSoldTicketsBySession(Integer sessionId) {
+        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.countSoldTicketsBySession(sessionId);
     }
 

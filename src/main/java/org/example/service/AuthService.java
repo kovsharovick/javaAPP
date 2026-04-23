@@ -8,4 +8,5 @@ public interface AuthService {
     void logout();
 
     User getCurrentUser();
+
 }

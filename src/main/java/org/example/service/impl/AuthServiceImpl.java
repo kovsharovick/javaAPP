@@ -6,17 +6,15 @@ import org.example.service.AuthContext;
 import org.example.service.AuthService;
 import org.example.service.PasswordHasher;
 
-import java.util.Optional;
-
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
-    private final AuthContext authContext;
     private final PasswordHasher passwordHasher;
+    private final AuthContext authContext;
 
     public AuthServiceImpl(UserRepository userRepository, AuthContext authContext, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
-        this.authContext = authContext;
         this.passwordHasher = passwordHasher;
+        this.authContext = authContext;
     }
 
     @Override
