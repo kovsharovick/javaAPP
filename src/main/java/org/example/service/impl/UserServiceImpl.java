@@ -74,11 +74,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateStatus(User user, boolean isAdmin) {
-        if (user == null) {
-            throw new IllegalArgumentException("Пользователь не найден");
-        }
-        if (!authContext.isAdmin() && user != authContext.getCurrentUser()) {
-            throw new SecurityException("Доступно только администраторам!");
+        if (user == null) throw new IllegalArgumentException("Пользователь не найден");
+        if (!authContext.isAdmin()) {
+            throw new SecurityException("Только администраторы могут изменять права других пользователей");
         }
         user.setAdmin(isAdmin);
         userRepository.update(user);

@@ -4,6 +4,7 @@ import org.example.config.DatabaseConnection;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
 import org.example.model.Ticket;
+import org.example.model.User;
 import org.example.repository.OrderRepository;
 import org.example.repository.TicketRepository;
 import org.example.service.AuthContext;
@@ -43,7 +44,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findByUserId(Integer userId) {
-        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
+        User current = authContext.getCurrentUser();
+        if (current == null || (!authContext.isAdmin() && !current.getId().equals(userId))) {
+            throw new SecurityException("Нет прав на просмотр этих заказов");
+        }
         return orderRepository.findByUserId(userId);
     }
 
@@ -109,9 +113,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderWithTickets getOrderWithTickets(Integer orderId) {
-        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
-        Order order = orderRepository.findById(orderId);
-        if (order == null) throw new IllegalArgumentException("Заказ не найден");
+        Order order = getById(orderId);
         List<Ticket> tickets = ticketRepository.findByOrderId(orderId);
         return new OrderWithTickets(order, tickets);
     }
@@ -187,8 +189,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getById(Integer id) {
-        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
-        return orderRepository.findById(id);
+        Order order = orderRepository.findById(id);
+        if (order == null) throw new IllegalArgumentException("Заказ не найден");
+        User current = authContext.getCurrentUser();
+        if (current == null || (!authContext.isAdmin() && !current.getId().equals(order.getUserId()))) {
+            throw new SecurityException("Нет прав на просмотр этого заказа");
+        }
+        return order;
     }
 
     @Override
