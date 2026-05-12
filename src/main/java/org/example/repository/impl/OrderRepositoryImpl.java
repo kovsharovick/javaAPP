@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.config.DataSourceProvider;
 import org.example.config.DatabaseConnection;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
@@ -17,7 +18,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Order save(Order order) {
         String sql = "INSERT INTO orders (id_user_data, amount, date_and_time, status, reserved_until) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, order.getUserId());
@@ -69,7 +70,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Order findById(Integer id) {
         String sql = "SELECT * FROM orders WHERE id_orders = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -87,7 +88,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public List<Order> findAll() {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) orders.add(mapResultSet(rs));
@@ -100,7 +101,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public void update(Order order) {
         String sql = "UPDATE orders SET id_user_data=?, amount=?, date_and_time=?, status=? WHERE id_orders=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, order.getUserId());
             pstmt.setBigDecimal(2, order.getAmount());
@@ -128,7 +129,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public boolean delete(Integer id) {
         String sql = "DELETE FROM orders WHERE id_orders = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate() > 0;
@@ -140,7 +141,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findExpiredReservations() {
         String sql = "SELECT * FROM orders WHERE status = 'WAIT_PAYMENT' AND reserved_until < NOW()";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             List<Order> orders = new ArrayList<>();
@@ -154,7 +155,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findByStatus(OrderStatus status) {
         String sql = "SELECT * FROM orders WHERE status = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setObject(1, status.toString(), java.sql.Types.OTHER);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -170,7 +171,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status) {
         String sql = "SELECT * FROM orders WHERE id_user_data = ? AND status = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             pstmt.setObject(2, status.toString(), java.sql.Types.OTHER);
@@ -187,7 +188,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public BigDecimal sumRevenueByPeriod(LocalDateTime from, LocalDateTime to) {
         String sql = "SELECT COALESCE(SUM(amount), 0) FROM orders WHERE status = 'COMPLETED' AND date_and_time BETWEEN ? AND ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setObject(1, from);
             pstmt.setObject(2, to);
@@ -238,7 +239,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public List<Order> findByUserId(Integer userId) {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE id_user_data = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             try (ResultSet rs = pstmt.executeQuery()) {

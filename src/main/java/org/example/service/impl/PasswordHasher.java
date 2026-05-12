@@ -4,7 +4,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordHasher implements org.example.service.PasswordHasher {
 
-    // Стоимость (log rounds). 12 – хороший баланс скорости и безопасности.
     private static final int LOG_ROUNDS = 12;
 
     @Override

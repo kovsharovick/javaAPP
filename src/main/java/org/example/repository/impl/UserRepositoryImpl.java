@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.config.DataSourceProvider;
 import org.example.config.DatabaseConnection;
 import org.example.model.User;
 import org.example.repository.UserRepository;
@@ -13,7 +14,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         String sql = "INSERT INTO user_data (email, password, full_name, is_admin) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, user.getEmail());
@@ -36,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findById(Integer id) {
         String sql = "SELECT * FROM user_data WHERE id_user_data = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -54,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM user_data";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) users.add(mapResultSet(rs));
@@ -67,7 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void update(User user) {
         String sql = "UPDATE user_data SET email=?, password=?, full_name=?, is_admin=? WHERE id_user_data=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getEmail());
             pstmt.setString(2, user.getPassword());
@@ -83,7 +84,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean delete(Integer id) {
         String sql = "DELETE FROM user_data WHERE id_user_data = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate() > 0;
@@ -95,7 +96,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByEmail(String email) {
         String sql = "SELECT * FROM user_data WHERE email = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -112,7 +113,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean existsByEmail(String email) {
         String sql = "SELECT COUNT(*) FROM user_data WHERE email = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             try (ResultSet rs = pstmt.executeQuery()) {

@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.config.DataSourceProvider;
 import org.example.config.DatabaseConnection;
 import org.example.model.Place;
 import org.example.model.TypePlace;
@@ -14,7 +15,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     @Override
     public Place save(Place place) {
         String sql = "INSERT INTO place (id_hall, rows, seat, type) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, place.getHallId());
@@ -37,7 +38,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     @Override
     public Place findById(Integer id) {
         String sql = "SELECT * FROM place WHERE id_place = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -55,7 +56,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     public List<Place> findAll() {
         List<Place> places = new ArrayList<>();
         String sql = "SELECT * FROM place";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) places.add(mapResultSet(rs));
@@ -68,7 +69,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     @Override
     public void update(Place place) {
         String sql = "UPDATE place SET id_hall=?, rows=?, seat=?, type=? WHERE id_place=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, place.getHallId());
             pstmt.setInt(2, place.getRows());
@@ -84,7 +85,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     @Override
     public boolean delete(Integer id) {
         String sql = "DELETE FROM place WHERE id_place = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate() > 0;
@@ -97,7 +98,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     public List<Place> findByHallId(Integer hallId) {
         List<Place> places = new ArrayList<>();
         String sql = "SELECT * FROM place WHERE id_hall = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, hallId);
             try (ResultSet rs = pstmt.executeQuery()) {

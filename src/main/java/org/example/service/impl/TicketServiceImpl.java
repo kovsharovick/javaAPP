@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.config.DatabaseConnection;
+import org.example.config.DataSourceProvider;
 import org.example.model.*;
 import org.example.repository.*;
 import org.example.service.AuthContext;
@@ -77,7 +77,7 @@ public class TicketServiceImpl implements TicketService {
 
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DataSourceProvider.getConnection();
             conn.setAutoCommit(false);
 
             for (TicketData td : ticketDataList) {

@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.config.DataSourceProvider;
 import org.example.config.DatabaseConnection;
 import org.example.model.Hall;
 import org.example.repository.HallRepository;
@@ -13,7 +14,7 @@ public class HallRepositoryImpl implements HallRepository {
     @Override
     public Hall save(Hall hall) {
         String sql = "INSERT INTO hall (rows, seat, price) VALUES (?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, hall.getRows());
@@ -35,7 +36,7 @@ public class HallRepositoryImpl implements HallRepository {
     @Override
     public Hall findById(Integer id) {
         String sql = "SELECT * FROM hall WHERE id_hall = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -53,7 +54,7 @@ public class HallRepositoryImpl implements HallRepository {
     public List<Hall> findAll() {
         List<Hall> halls = new ArrayList<>();
         String sql = "SELECT * FROM hall";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) halls.add(mapResultSet(rs));
@@ -66,7 +67,7 @@ public class HallRepositoryImpl implements HallRepository {
     @Override
     public void update(Hall hall) {
         String sql = "UPDATE hall SET rows=?, seat=?, price=? WHERE id_hall=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, hall.getRows());
             pstmt.setInt(2, hall.getSeatsPerRow());
@@ -81,7 +82,7 @@ public class HallRepositoryImpl implements HallRepository {
     @Override
     public boolean delete(Integer id) {
         String sql = "DELETE FROM hall WHERE id_hall = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate() > 0;

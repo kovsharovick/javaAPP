@@ -1,6 +1,6 @@
 package org.example.service.impl;
 
-import org.example.config.DatabaseConnection;
+import org.example.config.DataSourceProvider;
 import org.example.model.Order;
 import org.example.model.OrderStatus;
 import org.example.model.Ticket;
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DataSourceProvider.getConnection();
             conn.setAutoCommit(false);
             orderRepository.cancelOrderWithConnection(conn, orderId);
             conn.commit();
@@ -131,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
 
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DataSourceProvider.getConnection();
             conn.setAutoCommit(false);
             orderRepository.confirmPaymentWithConnection(conn, orderId);
             conn.commit();
@@ -158,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
         if (expiredOrders.isEmpty()) return;
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DataSourceProvider.getConnection();
             conn.setAutoCommit(false);
             for (Order order : expiredOrders) {
                 orderRepository.cancelOrderWithConnection(conn, order.getId());
