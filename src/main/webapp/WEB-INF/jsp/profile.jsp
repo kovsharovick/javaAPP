@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Профиль — CINEMAX</title>
+  <title>Профиль — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -34,7 +34,7 @@
     </c:if>
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px">
-      <h3 style="font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;margin-bottom:24px">
+      <h3 style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:24px">
         Редактировать <span style="color:var(--accent)">профиль</span>
       </h3>
 
@@ -59,7 +59,7 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper"><div class="footer-logo">SWAGAPLEX</div><p>© 2026 Swagaplex</p></div>
 </footer>
 
 </body>

@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Выручка — Админ — CINEMAX</title>
+    <title>Выручка — Админ — SWAGAPLEX</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
         <div class="admin-layout">
             <%@ include file="sidebar.jsp" %>
             <div>
-                <h1 class="page-title">ВЫРУЧКА</h1>
+                <h1 class="page-title" style="padding:0;border:none;font-size:42px">ВЫРУЧКА</h1>
                 <form method="get" action="${pageContext.request.contextPath}/admin/revenue" style="display:flex;gap:16px;align-items:flex-end">
                     <div class="form-group"><label>С даты</label><input type="date" name="from" class="form-control" value="${param.from}"></div>
                     <div class="form-group"><label>По дату</label><input type="date" name="to" class="form-control" value="${param.to}"></div>
@@ -30,6 +30,11 @@
         </div>
     </div>
 </main>
-<%@ include file="../footer.jsp" %>
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

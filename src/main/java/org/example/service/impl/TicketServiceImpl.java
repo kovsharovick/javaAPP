@@ -171,7 +171,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> findBySessionId(Integer sessionId) {
-        if (!authContext.isAdmin()) throw new SecurityException("Доступно только администраторам!");
         return ticketRepository.findBySessionId(sessionId);
     }
 

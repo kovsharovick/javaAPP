@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Пользователи — Админ — CINEMAX</title>
+    <title>Пользователи — Админ — SWAGAPLEX</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
             <%@ include file="sidebar.jsp" %>
             <div>
                 <div class="flex-between mb-3">
-                    <h1 class="page-title">ПОЛЬЗОВАТЕЛИ</h1>
+                    <h1 class="page-title" style="padding:0;border:none;font-size:42px">ПОЛЬЗОВАТЕЛИ</h1>
                 </div>
                 <c:if test="${not empty error}"><div class="alert alert-error">${error}</div></c:if>
                 <div class="table-wrap">
@@ -59,6 +59,13 @@
         </div>
     </div>
 </main>
-<%@ include file="../footer.jsp" %>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
+
 </body>
 </html>

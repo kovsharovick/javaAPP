@@ -55,7 +55,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override
     public List<Session> findAll() {
         List<Session> sessions = new ArrayList<>();
-        String sql = "SELECT * FROM session";
+        String sql = "SELECT * FROM session ORDER BY starting DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -97,7 +97,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override
     public List<Session> findByFilmId(Integer filmId) {
         List<Session> sessions = new ArrayList<>();
-        String sql = "SELECT * FROM session WHERE id_film = ?";
+        String sql = "SELECT * FROM session WHERE id_film = ? ORDER BY starting DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, filmId);
@@ -113,7 +113,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override
     public List<Session> findByHallId(Integer hallId) {
         List<Session> sessions = new ArrayList<>();
-        String sql = "SELECT * FROM session WHERE id_hall = ?";
+        String sql = "SELECT * FROM session WHERE id_hall = ? ORDER BY starting DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, hallId);
@@ -129,7 +129,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override
     public List<Session> findByStartTimeBetween(LocalDateTime from, LocalDateTime to) {
         List<Session> sessions = new ArrayList<>();
-        String sql = "SELECT * FROM session WHERE starting BETWEEN ? AND ?";
+        String sql = "SELECT * FROM session WHERE starting BETWEEN ? AND ? ORDER BY starting";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setObject(1, from);
@@ -147,7 +147,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public List<Session> findByFilmIdAndStartTimeBetween(Integer filmId, LocalDateTime from, LocalDateTime to) {
-        String sql = "SELECT * FROM session WHERE id_film = ? AND starting BETWEEN ? AND ?";
+        String sql = "SELECT * FROM session WHERE id_film = ? AND starting BETWEEN ? AND ? ORDER BY starting";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, filmId);
@@ -191,7 +191,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     @Override
     public List<Session> findByStartTimeAfter(LocalDateTime time) {
         List<Session> sessions = new ArrayList<>();
-        String sql = "SELECT * FROM session WHERE starting > ?";
+        String sql = "SELECT * FROM session WHERE starting > ? ORDER BY starting ASC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setObject(1, time);

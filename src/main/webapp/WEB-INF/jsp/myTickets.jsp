@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мои билеты — CINEMAX</title>
+  <title>Мои билеты — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -68,7 +68,7 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper"><div class="footer-logo">SWAGAPLEX</div><p>© 2026 Swagaplex</p></div>
 </footer>
 
 </body>

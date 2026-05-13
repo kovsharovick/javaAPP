@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Билеты — Админ — CINEMAX</title>
+    <title>Билеты — Админ — SWAGAPLEX</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
         <div class="admin-layout">
             <%@ include file="sidebar.jsp" %>
             <div>
-                <h1 class="page-title">БИЛЕТЫ</h1>
+                <h1 class="page-title" style="padding:0;border:none;font-size:42px">БИЛЕТЫ</h1>
                 <div class="table-wrap">
                     <table>
                         <thead>
@@ -45,6 +45,11 @@
         </div>
     </div>
 </main>
-<%@ include file="../footer.jsp" %>
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

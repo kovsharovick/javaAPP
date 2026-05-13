@@ -5,15 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.model.Place;
-import org.example.model.Session;
-import org.example.model.Ticket;
-import org.example.model.TicketStatus;
-import org.example.service.PlaceService;
-import org.example.service.SessionService;
-import org.example.service.TicketService;
+import org.example.model.*;
+import org.example.service.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,12 +21,16 @@ public class SessionPlacesServlet extends HttpServlet {
     private PlaceService placeService;
     private SessionService sessionService;
     private TicketService ticketService;
+    private FilmService filmService;
+    private HallService hallService;
 
     @Override
     public void init() {
         placeService = (PlaceService) getServletContext().getAttribute("placeService");
         sessionService = (SessionService) getServletContext().getAttribute("sessionService");
         ticketService = (TicketService) getServletContext().getAttribute("ticketService");
+        filmService = (FilmService) getServletContext().getAttribute("filmService");
+        hallService = (HallService) getServletContext().getAttribute("hallService");
     }
 
     @Override
@@ -47,6 +47,15 @@ public class SessionPlacesServlet extends HttpServlet {
             return;
         }
 
+        Film film = filmService.getById(session.getFilmId());
+        Hall hall = hallService.getById(session.getHallId());
+        if (film == null || hall == null) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Не удалось загрузить фильм или зал");
+            return;
+        }
+
+        BigDecimal basePrice = film.getPrice().add(hall.getPrice().multiply(BigDecimal.valueOf(0.5)));
+
         List<Place> allPlaces = placeService.findByHallId(session.getHallId());
         List<Ticket> tickets = ticketService.findBySessionId(sessionId);
         Set<Integer> takenPlaceIds = tickets.stream()
@@ -61,6 +70,7 @@ public class SessionPlacesServlet extends HttpServlet {
         req.setAttribute("takenPlaceIds", takenPlaceIds);
         req.setAttribute("sessionId", sessionId);
         req.setAttribute("reservationMinutes", ticketService.getReservationMinutes());
+        req.setAttribute("basePrice", basePrice);
 
         req.getRequestDispatcher("/WEB-INF/jsp/sessionPlaces.jsp").forward(req, resp);
     }

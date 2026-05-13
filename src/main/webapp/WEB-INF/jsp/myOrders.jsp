@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мои заказы — CINEMAX</title>
+  <title>Мои заказы — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -34,7 +34,7 @@
             <div>
               <div class="order-id">ЗАКАЗ #${order.id}</div>
               <div class="order-amount">${order.amount} ₽</div>
-              <div class="order-date">${order.dateTime}</div>
+              <div class="order-date">${order.dateTime.toString().replace('T', ' ').substring(0, 19)}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px">
               <c:choose>
@@ -70,7 +70,7 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper"><div class="footer-logo">SWAGAPLEX</div><p>© 2026 Swagaplex</p></div>
 </footer>
 
 </body>

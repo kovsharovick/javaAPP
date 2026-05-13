@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Вход — CINEMAX</title>
+  <title>Вход — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body style="display:flex;min-height:100vh;flex-direction:column">
@@ -17,8 +17,8 @@
 
     <div class="form-card animate-up">
       <div style="text-align:center;margin-bottom:32px">
-        <a href="${pageContext.request.contextPath}/" style="font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:4px;color:var(--accent);text-decoration:none">
-          CINE<span style="color:var(--accent2)">■</span>MAX
+        <a href="${pageContext.request.contextPath}/" style="font-family:'Poppins','Montserrat',sans-serif;font-size:32px;letter-spacing:4px;color:var(--accent);text-decoration:none">
+          SWAGAPLEX
         </a>
       </div>
 
@@ -60,7 +60,7 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper"><div class="footer-logo">SWAGAPLEX</div><p>© 2026 Swagaplex</p></div>
 </footer>
 
 </body>

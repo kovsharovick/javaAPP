@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${film != null ? 'Редактирование' : 'Добавление'} фильма — CINEMAX</title>
+  <title>${film != null ? 'Редактирование' : 'Добавление'} фильма — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -22,11 +22,11 @@
           ← Все фильмы
         </a>
 
-        <h1 style="font-family:'Bebas Neue',cursive;font-size:42px;letter-spacing:3px;margin-bottom:32px">
-          <c:choose>
-            <c:when test="${film != null}">Редактировать <span style="color:var(--accent)">фильм</span></c:when>
-            <c:otherwise>Новый <span style="color:var(--accent)">фильм</span></c:otherwise>
-          </c:choose>
+        <h1 class="page-title" style="padding:0;border:none;font-size:42px">
+            <c:choose>
+                <c:when test="${film != null}">Редактировать <span style="color:var(--accent)">фильм</span></c:when>
+                <c:otherwise>Новый <span style="color:var(--accent)">фильм</span></c:otherwise>
+            </c:choose>
         </h1>
 
         <c:if test="${not empty error}">
@@ -77,6 +77,11 @@
     </div>
   </div>
 </main>
-
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

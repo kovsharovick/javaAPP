@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 :root {
   --bg: #080a0f;
   --bg2: #0e1118;
@@ -67,7 +67,7 @@ nav {
 }
 
 .nav-logo {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
   font-size: 28px;
   letter-spacing: 3px;
   color: var(--accent);
@@ -362,7 +362,7 @@ nav {
 }
 
 .form-title {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
   font-size: 36px;
   letter-spacing: 2px;
   margin-bottom: 8px;
@@ -464,12 +464,17 @@ tbody tr:last-child td { border-bottom: none; }
 }
 
 .page-title {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 56px;
-  letter-spacing: 4px;
-  line-height: 1;
-  color: var(--text);
-  margin-bottom: 8px;
+    font-family: 'Poppins', 'Montserrat', sans-serif;
+    font-size: 56px;
+    margin-bottom: 20px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
 }
 
 .page-title span { color: var(--accent); }
@@ -508,7 +513,7 @@ tbody tr:last-child td { border-bottom: none; }
 .hero-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
 
 .hero-title {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
   font-size: clamp(72px, 10vw, 120px);
   letter-spacing: 6px;
   line-height: 0.9;
@@ -625,7 +630,7 @@ tbody tr:last-child td { border-bottom: none; }
 }
 
 .ticket-num {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
   font-size: 36px;
   color: var(--accent);
   letter-spacing: 2px;
@@ -647,7 +652,7 @@ footer {
 }
 
 footer .footer-logo {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
   font-size: 24px;
   letter-spacing: 3px;
   color: var(--text3);
@@ -735,7 +740,7 @@ footer .footer-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Poppins', 'Montserrat', sans-serif;
   font-size: 32px;
   color: #000;
   flex-shrink: 0;

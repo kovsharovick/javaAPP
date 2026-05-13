@@ -86,7 +86,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public List<Ticket> findAll() {
         List<Ticket> tickets = new ArrayList<>();
-        String sql = "SELECT * FROM ticket";
+        String sql = "SELECT t.* FROM ticket t JOIN session s ON t.id_session = s.id_session ORDER BY s.starting DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -177,7 +177,11 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public List<Ticket> findByUserId(Integer userId) {
         List<Ticket> tickets = new ArrayList<>();
-        String sql = "SELECT t.* FROM ticket t JOIN orders o ON t.id_orders = o.id_orders WHERE o.id_user_data = ?";
+        String sql = "SELECT t.* FROM ticket t " +
+                "JOIN orders o ON t.id_orders = o.id_orders " +
+                "JOIN session s ON t.id_session = s.id_session " +
+                "WHERE o.id_user_data = ? " +
+                "ORDER BY s.starting DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);

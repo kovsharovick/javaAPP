@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${film.name} — CINEMAX</title>
+  <title>${film.name} — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -33,7 +33,7 @@
       <!-- Info -->
       <div>
         <div style="font-size:11px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:12px">Фильм</div>
-        <h1 style="font-family:'Bebas Neue',cursive;font-size:64px;letter-spacing:4px;line-height:1;margin-bottom:24px">${film.name}</h1>
+        <h1 style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:64px;letter-spacing:4px;line-height:1;margin-bottom:24px">${film.name}</h1>
 
         <div style="display:flex;gap:24px;margin-bottom:32px;flex-wrap:wrap">
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 24px;text-align:center">
@@ -63,8 +63,8 @@
 
 <footer>
   <div class="wrapper">
-    <div class="footer-logo">CINEMAX</div>
-    <p>© 2025 CineMax</p>
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
   </div>
 </footer>
 

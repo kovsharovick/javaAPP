@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${hall != null ? 'Редактирование' : 'Создание'} зала — CINEMAX</title>
+    <title>${hall != null ? 'Редактирование' : 'Создание'} зала — SWAGAPLEX</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -18,8 +18,11 @@
             <%@ include file="sidebar.jsp" %>
             <div style="max-width:480px">
                 <a href="${pageContext.request.contextPath}/admin/halls" style="color:var(--text2);text-decoration:none;font-size:14px;display:inline-flex;gap:6px;margin-bottom:24px">← Все залы</a>
-                <h1 style="font-family:'Bebas Neue',cursive;font-size:42px;letter-spacing:3px;margin-bottom:32px">
-                    <c:choose><c:when test="${hall != null}">Изменить <span style="color:var(--accent)">зал</span></c:when><c:otherwise>Новый <span style="color:var(--accent)">зал</span></c:otherwise></c:choose>
+                <h1 class="page-title" style="padding:0;border:none;font-size:42px">
+                    <c:choose>
+                        <c:when test="${hall != null}">Изменить <span style="color:var(--accent)">зал</span></c:when>
+                        <c:otherwise>Новый <span style="color:var(--accent)">зал</span></c:otherwise>
+                    </c:choose>
                 </h1>
                 <c:if test="${not empty error}"><div class="alert alert-error">⚠ ${error}</div></c:if>
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px">
@@ -69,6 +72,11 @@
     </div>
 </main>
 
-<%@ include file="../footer.jsp" %>
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

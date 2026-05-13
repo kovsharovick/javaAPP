@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Залы — Админ — CINEMAX</title>
+  <title>Залы — Админ — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
 
       <div>
         <div class="flex-between mb-3">
-          <h1 style="font-family:'Bebas Neue',cursive;font-size:42px;letter-spacing:3px">ЗАЛЫ</h1>
+          <h1 class="page-title" style="padding:0;border:none;font-size:42px">ЗАЛЫ</h1>
           <a href="${pageContext.request.contextPath}/admin/halls?action=create" class="btn btn-primary">+ Добавить зал</a>
         </div>
 
@@ -68,6 +68,11 @@
     </div>
   </div>
 </main>
-
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

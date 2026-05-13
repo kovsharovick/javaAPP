@@ -61,7 +61,6 @@ public class AdminUserServlet extends HttpServlet {
                 if (!targetUser.getAdmin()) {
                     req.setAttribute("error", "Пользователь не является администратором");
                 } else if (targetUser.getId().equals(currentUser.getId())) {
-                    // Запрещаем снимать права с самого себя
                     req.setAttribute("error", "Нельзя снять права администратора с самого себя");
                 } else {
                     userService.updateStatus(targetUser, false);

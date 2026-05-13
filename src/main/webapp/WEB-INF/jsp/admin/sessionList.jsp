@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Сеансы — Админ — CINEMAX</title>
+  <title>Сеансы — Админ — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
 
       <div>
         <div class="flex-between mb-3">
-          <h1 style="font-family:'Bebas Neue',cursive;font-size:42px;letter-spacing:3px">СЕАНСЫ</h1>
+          <h1 class="page-title" style="padding:0;border:none;font-size:42px">СЕАНСЫ</h1>
           <a href="${pageContext.request.contextPath}/admin/sessions?action=create" class="btn btn-primary">+ Создать сеанс</a>
         </div>
 
@@ -48,8 +48,8 @@
                       </c:forEach>
                     </td>
                     <td>Зал #${session.hallId}</td>
-                    <td class="text-mono" style="color:var(--accent3);font-size:13px">${session.startTime}</td>
-                    <td class="text-mono" style="color:var(--text3);font-size:13px">${session.finishTime}</td>
+                    <td class="text-mono" style="color:var(--accent3);font-size:13px">${session.startTime.toString().replace('T', ' ')}</td>
+                    <td class="text-mono" style="color:var(--text3);font-size:13px">${session.finishTime.toString().replace('T', ' ')}</td>
                     <td>
                       <div style="display:flex;gap:8px">
                         <a href="${pageContext.request.contextPath}/admin/sessions?action=edit&id=${session.id}" class="btn btn-ghost btn-sm">✏</a>
@@ -73,6 +73,11 @@
     </div>
   </div>
 </main>
-
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

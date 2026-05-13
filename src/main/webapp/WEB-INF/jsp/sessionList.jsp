@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Сеансы — CINEMAX</title>
+  <title>Сеансы — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -54,7 +54,7 @@
                 <div class="session-details">
                   <span>Зал #${session.hallId}</span>
                   <span>•</span>
-                  <span class="session-time">${session.startTime}</span>
+                  <span class="session-time">${session.startTime.toString().replace('T', ' ')}</span>
                 </div>
               </div>
               <div style="display:flex;gap:10px;align-items:center">
@@ -75,8 +75,8 @@
 
 <footer>
   <div class="wrapper">
-    <div class="footer-logo">CINEMAX</div>
-    <p>© 2025 CineMax</p>
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
   </div>
 </footer>
 

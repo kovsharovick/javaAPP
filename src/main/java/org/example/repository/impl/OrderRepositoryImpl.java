@@ -87,7 +87,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findAll() {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders";
+        String sql = "SELECT * FROM orders ORDER BY date_and_time DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -154,7 +154,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<Order> findByStatus(OrderStatus status) {
-        String sql = "SELECT * FROM orders WHERE status = ?";
+        String sql = "SELECT * FROM orders WHERE status = ? ORDER BY date_and_time DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setObject(1, status.toString(), java.sql.Types.OTHER);
@@ -170,7 +170,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status) {
-        String sql = "SELECT * FROM orders WHERE id_user_data = ? AND status = ?";
+        String sql = "SELECT * FROM orders WHERE id_user_data = ? AND status = ? ORDER BY date_and_time DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
@@ -238,7 +238,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findByUserId(Integer userId) {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE id_user_data = ?";
+        String sql = "SELECT * FROM orders WHERE id_user_data = ? ORDER BY date_and_time DESC";
         try (Connection conn = DataSourceProvider.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);

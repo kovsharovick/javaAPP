@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Места зала #${hallId} — Админ — CINEMAX</title>
+  <title>Места зала #${hallId} — Админ — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
       <div>
         <div class="flex-between mb-3">
           <div>
-            <h1 style="font-family:'Bebas Neue',cursive;font-size:42px;letter-spacing:3px">МЕСТА ЗАЛА #${hallId}</h1>
+            <h1 class="page-title" style="padding:0;border:none;font-size:42px">МЕСТА ЗАЛА #${hallId}</h1>
             <c:if test="${not empty hall}">
               <p class="text-muted" style="margin-top:8px">Рядов: ${hall.rows}, мест в ряду: ${hall.seatsPerRow}</p>
             </c:if>
@@ -108,7 +108,10 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
 </footer>
 
 </body>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Сеанс — CINEMAX</title>
+  <title>Сеанс — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -20,16 +20,16 @@
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;margin-bottom:24px">
       <div style="font-size:11px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:12px">Информация о сеансе #${session.id}</div>
-      <h1 style="font-family:'Bebas Neue',cursive;font-size:52px;letter-spacing:4px;margin-bottom:32px">${film.name}</h1>
+      <h1 style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:52px;letter-spacing:4px;margin-bottom:32px">${film.name}</h1>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px">
         <div style="background:var(--bg2);border-radius:12px;padding:20px">
           <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Начало</div>
-          <div style="font-family:'DM Mono',monospace;font-size:17px;color:var(--accent3)">${session.startTime}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:17px;color:var(--accent3)">${session.startTime.toString().replace('T', ' ')}</div>
         </div>
         <div style="background:var(--bg2);border-radius:12px;padding:20px">
           <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Окончание</div>
-          <div style="font-family:'DM Mono',monospace;font-size:17px;color:var(--text2)">${session.finishTime}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:17px;color:var(--text2)">${session.finishTime.toString().replace('T', ' ')}</div>
         </div>
         <div style="background:var(--bg2);border-radius:12px;padding:20px">
           <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Зал</div>
@@ -49,7 +49,7 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper"><div class="footer-logo">SWAGAPLEX</div><p>© 2026 Swagaplex</p></div>
 </footer>
 
 </body>

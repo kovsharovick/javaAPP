@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CINEMAX — Твой кинотеатр</title>
+  <title>SWAGAPLEX — Твой кинотеатр</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -40,19 +40,19 @@
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:700px">
         <div class="card" style="padding:28px;text-align:center">
           <div style="font-size:32px;margin-bottom:12px">🎬</div>
-          <div style="font-family:'Bebas Neue',cursive;font-size:40px;color:var(--accent);letter-spacing:2px">
+          <div style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:40px;color:var(--accent);letter-spacing:2px">
             ${films != null ? films.size() : ''}
           </div>
           <div style="color:var(--text2);font-size:13px;margin-top:4px">Фильмов в прокате</div>
         </div>
         <div class="card" style="padding:28px;text-align:center">
           <div style="font-size:32px;margin-bottom:12px">🏟️</div>
-          <div style="font-family:'Bebas Neue',cursive;font-size:40px;color:var(--accent3);letter-spacing:2px">IMAX</div>
+          <div style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:40px;color:var(--accent3);letter-spacing:2px">IMAX</div>
           <div style="color:var(--text2);font-size:13px;margin-top:4px">Качество экрана</div>
         </div>
         <div class="card" style="padding:28px;text-align:center">
           <div style="font-size:32px;margin-bottom:12px">⚡</div>
-          <div style="font-family:'Bebas Neue',cursive;font-size:40px;color:var(--accent2);letter-spacing:2px">2 МИН</div>
+          <div style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:40px;color:var(--accent2);letter-spacing:2px">2 МИН</div>
           <div style="color:var(--text2);font-size:13px;margin-top:4px">Бронирование</div>
         </div>
       </div>
@@ -62,8 +62,8 @@
 
 <footer>
   <div class="wrapper">
-    <div class="footer-logo">CINEMAX</div>
-    <p>© 2025 CineMax. Все права защищены.</p>
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex. Все права защищены.</p>
   </div>
 </footer>
 

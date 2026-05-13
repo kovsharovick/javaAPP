@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Заказы — Админ — CINEMAX</title>
+  <title>Заказы — Админ — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
     <div class="admin-layout">
       <%@ include file="sidebar.jsp" %>
       <div>
-        <h1 style="font-family:'Bebas Neue',cursive;font-size:42px;letter-spacing:3px;margin-bottom:24px">ЗАКАЗЫ</h1>
+        <h1 class="page-title" style="padding:0;border:none;font-size:42px">ЗАКАЗЫ</h1>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
           <div class="table-wrap">
             <table>
@@ -32,8 +32,8 @@
                         <c:when test="${order.orderStatus == 'CANCELED'}"><span class="status-badge status-canceled">Отменён</span></c:when>
                       </c:choose>
                     </td>
-                    <td style="font-size:13px;color:var(--text2)">${order.dateTime}</td>
-                    <td style="font-size:13px;color:var(--text3)">${order.reservedUntil}</td>
+                    <td style="font-size:13px;color:var(--text2)">${order.dateTime.toString().replace('T', ' ').substring(0, 19)}</td>
+                    <td style="font-size:13px;color:var(--text3)">${order.reservedUntil.toString().replace('T', ' ').substring(0, 19)}</td>
                   </tr>
                 </c:forEach>
                 <c:if test="${empty orders}"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">Заказов нет</td></tr></c:if>
@@ -45,5 +45,11 @@
     </div>
   </div>
 </main>
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

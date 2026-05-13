@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Выбор зала — Админ — CINEMAX</title>
+    <title>Выбор зала — Админ — SWAGAPLEX</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
         <div class="admin-layout">
             <%@ include file="sidebar.jsp" %>
             <div>
-                <h1 class="page-title">Управление местами</h1>
+                <h1 class="page-title" style="padding:0;border:none;font-size:42px">Управление местами</h1>
                 <p class="text-muted">Выберите зал, чтобы просмотреть или изменить места</p>
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:32px">
                     <c:forEach var="hall" items="${halls}">
@@ -32,6 +32,11 @@
         </div>
     </div>
 </main>
-<%@ include file="../footer.jsp" %>
+<footer>
+  <div class="wrapper">
+    <div class="footer-logo">SWAGAPLEX</div>
+    <p>© 2026 Swagaplex</p>
+  </div>
+</footer>
 </body>
 </html>

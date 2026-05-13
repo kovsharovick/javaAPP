@@ -3,7 +3,7 @@
 <nav>
   <div class="wrapper nav-inner">
     <a href="${pageContext.request.contextPath}/" class="nav-logo">
-      CINE<span class="logo-dot">■</span>MAX
+        SWAGAPLEX
     </a>
     <ul class="nav-links">
       <li><a href="${pageContext.request.contextPath}/films">Фильмы</a></li>

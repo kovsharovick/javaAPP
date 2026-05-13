@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Статус заказа — CINEMAX</title>
+  <title>Статус заказа — SWAGAPLEX</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
     <c:choose>
       <c:when test="${not empty message}">
         <div style="font-size:72px;margin-bottom:16px">🎉</div>
-        <h1 style="font-family:'Bebas Neue',cursive;font-size:52px;letter-spacing:4px;color:var(--success);margin-bottom:12px">
+        <h1 style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:52px;letter-spacing:4px;color:var(--success);margin-bottom:12px">
           Оплачено!
         </h1>
         <p style="color:var(--text2);font-size:16px;margin-bottom:32px">${message}</p>
@@ -29,7 +29,7 @@
       </c:when>
       <c:otherwise>
         <div style="font-size:72px;margin-bottom:16px">❌</div>
-        <h1 style="font-family:'Bebas Neue',cursive;font-size:52px;letter-spacing:4px;color:var(--danger);margin-bottom:12px">
+        <h1 style="font-family: 'Poppins', 'Montserrat', sans-serif;font-size:52px;letter-spacing:4px;color:var(--danger);margin-bottom:12px">
           Ошибка
         </h1>
         <p style="color:var(--text2);font-size:16px;margin-bottom:32px">${error}</p>
@@ -41,7 +41,7 @@
 </main>
 
 <footer>
-  <div class="wrapper"><div class="footer-logo">CINEMAX</div><p>© 2025 CineMax</p></div>
+  <div class="wrapper"><div class="footer-logo">SWAGAPLEX</div><p>© 2026 Swagaplex</p></div>
 </footer>
 
 </body>

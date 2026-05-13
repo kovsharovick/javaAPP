@@ -48,8 +48,9 @@ public class BuyServlet extends HttpServlet {
             req.setAttribute("order", order);
             req.getRequestDispatcher("/WEB-INF/jsp/orderCreated.jsp").forward(req, resp);
         } catch (Exception e) {
+            e.printStackTrace();
             req.setAttribute("error", e.getMessage());
-            resp.sendRedirect(req.getContextPath() + "/sessionPlaces?sessionId=" + sessionId);
+            req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
         }
     }
 }
