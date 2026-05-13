@@ -19,7 +19,6 @@ import java.util.Map;
 
 @WebServlet("/sessions")
 public class SessionListServlet extends HttpServlet {
-
     private SessionService sessionService;
     private FilmService filmService;
 
@@ -34,18 +33,30 @@ public class SessionListServlet extends HttpServlet {
         String filmIdParam = req.getParameter("filmId");
         String dateParam = req.getParameter("date");
         List<Session> sessions;
-        if (filmIdParam != null && !filmIdParam.isEmpty()) {
+
+        LocalDateTime from = null, to = null;
+        if (dateParam != null && !dateParam.isEmpty()) {
+            LocalDate date = LocalDate.parse(dateParam);
+            from = date.atStartOfDay();
+            to = date.plusDays(1).atStartOfDay();
+        }
+
+        if (filmIdParam != null && !filmIdParam.isEmpty() && dateParam != null && !dateParam.isEmpty()) {
+            int filmId = Integer.parseInt(filmIdParam);
+            sessions = sessionService.findByFilmIdAndDateRange(filmId, from, to);
+        } else if (filmIdParam != null && !filmIdParam.isEmpty()) {
             sessions = sessionService.findByFilmId(Integer.parseInt(filmIdParam));
         } else if (dateParam != null && !dateParam.isEmpty()) {
-            LocalDate date = LocalDate.parse(dateParam);
-            sessions = sessionService.findByStartTimeBetween(date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+            sessions = sessionService.findByStartTimeBetween(from, to);
         } else {
             sessions = sessionService.findUpcoming(LocalDateTime.now());
         }
+
         Map<Integer, Film> filmMap = new HashMap<>();
         for (Session s : sessions) {
             filmMap.put(s.getFilmId(), filmService.getById(s.getFilmId()));
         }
+
         req.setAttribute("sessions", sessions);
         req.setAttribute("filmMap", filmMap);
         req.getRequestDispatcher("/WEB-INF/jsp/sessionList.jsp").forward(req, resp);

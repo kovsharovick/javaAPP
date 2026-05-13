@@ -13,7 +13,6 @@ import java.util.List;
 
 @WebServlet("/admin/users")
 public class AdminUserServlet extends HttpServlet {
-
     private UserService userService;
 
     @Override
@@ -31,17 +30,47 @@ public class AdminUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
+        String userIdStr = req.getParameter("userId");
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Не указан пользователь");
+            return;
+        }
+        int userId = Integer.parseInt(userIdStr);
+        User targetUser = userService.getById(userId);
+        if (targetUser == null) {
+            req.setAttribute("error", "Пользователь не найден");
+            doGet(req, resp);
+            return;
+        }
+
+        User currentUser = (User) req.getSession().getAttribute("currentUser");
+        if (currentUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
         try {
-            int userId = Integer.parseInt(req.getParameter("userId"));
-            User user = userService.getById(userId);
             if ("grant".equals(action)) {
-                userService.updateStatus(user, true);
+                if (targetUser.getAdmin()) {
+                    req.setAttribute("error", "Пользователь уже является администратором");
+                } else {
+                    userService.updateStatus(targetUser, true);
+                    req.setAttribute("message", "Права администратора назначены");
+                }
             } else if ("revoke".equals(action)) {
-                userService.updateStatus(user, false);
+                if (!targetUser.getAdmin()) {
+                    req.setAttribute("error", "Пользователь не является администратором");
+                } else if (targetUser.getId().equals(currentUser.getId())) {
+                    // Запрещаем снимать права с самого себя
+                    req.setAttribute("error", "Нельзя снять права администратора с самого себя");
+                } else {
+                    userService.updateStatus(targetUser, false);
+                    req.setAttribute("message", "Права администратора сняты");
+                }
             }
         } catch (Exception e) {
             req.setAttribute("error", e.getMessage());
         }
-        resp.sendRedirect(req.getContextPath() + "/admin/users");
+        doGet(req, resp);
     }
 }

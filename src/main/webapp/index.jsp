@@ -1,5 +1,4 @@
-<html>
-<body>
-<h1>Кинотеатр работает!</h1>
-</body>
-</html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    response.sendRedirect(request.getContextPath() + "/films");
+%>

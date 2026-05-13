@@ -13,6 +13,8 @@ import org.example.service.PlaceService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/admin/places")
 public class AdminPlaceServlet extends HttpServlet {
@@ -31,8 +33,13 @@ public class AdminPlaceServlet extends HttpServlet {
         String hallIdParam = req.getParameter("hallId");
         if (hallIdParam != null) {
             int hallId = Integer.parseInt(hallIdParam);
+            Hall hall = hallService.getById(hallId);
             List<Place> places = placeService.findByHallId(hallId);
+            Map<Integer, List<Place>> rowsMap = places.stream()
+                    .collect(Collectors.groupingBy(Place::getRows));
+            req.setAttribute("hall", hall);
             req.setAttribute("places", places);
+            req.setAttribute("rowsMap", rowsMap);
             req.setAttribute("hallId", hallId);
             req.getRequestDispatcher("/WEB-INF/jsp/admin/placeList.jsp").forward(req, resp);
         } else {

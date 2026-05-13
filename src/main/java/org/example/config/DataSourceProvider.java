@@ -31,6 +31,7 @@ public class DataSourceProvider {
             config.setJdbcUrl(url);
             config.setUsername(user);
             config.setPassword(password);
+            config.setDriverClassName("org.postgresql.Driver");
             config.setMaximumPoolSize(10);
             config.setMinimumIdle(2);
             config.setConnectionTimeout(30000);

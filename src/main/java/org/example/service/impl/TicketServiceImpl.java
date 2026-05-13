@@ -14,7 +14,7 @@ import java.util.*;
 
 public class TicketServiceImpl implements TicketService {
 
-    public static final int RESERVATION_MINUTES = 2;
+    public static final int RESERVATION_MINUTES = 1;
     private static final BigDecimal HALL_PRICE_FACTOR = BigDecimal.valueOf(0.5);
     private static final BigDecimal VIP_PRICE_FACTOR = BigDecimal.valueOf(1.5);
     private final TicketRepository ticketRepository;

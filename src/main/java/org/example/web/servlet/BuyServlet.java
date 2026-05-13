@@ -43,6 +43,8 @@ public class BuyServlet extends HttpServlet {
         }
         try {
             Order order = ticketService.buyTickets(tickets);
+            int reservationMinutes = ticketService.getReservationMinutes();
+            req.setAttribute("reservationMinutes", reservationMinutes);
             req.setAttribute("order", order);
             req.getRequestDispatcher("/WEB-INF/jsp/orderCreated.jsp").forward(req, resp);
         } catch (Exception e) {
