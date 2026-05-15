@@ -100,7 +100,6 @@
 </div>
 
 <script>
-    // Простой и безопасный JavaScript без eval
     const selected = new Map();
 
     function toggleSeat(btn) {
